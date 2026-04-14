@@ -115,22 +115,22 @@ export default function Navbar() {
 			{open && (
 				<div className="md:hidden bg-white border-t border-gray-100 px-6 py-6 flex flex-col gap-5">
 					{navLinks.map((link) => (
-						<a
+						<Link
 							key={link.label}
 							href={link.href}
 							className="text-sm font-medium text-gray-700 hover:text-navy"
 							onClick={() => setOpen(false)}
 						>
 							{link.label}
-						</a>
+						</Link>
 					))}
-					<a
+					<Link
 						href="#contact"
 						className="btn-primary text-center"
 						style={{ padding: "12px 22px", fontSize: "14px" }}
 					>
 						List Property
-					</a>
+					</Link>
 				</div>
 			)}
 		</nav>
