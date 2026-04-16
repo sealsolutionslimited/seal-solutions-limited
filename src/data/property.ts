@@ -1,4 +1,5 @@
 import { Listing } from "@/types/types";
+import { Building2, Home, Star } from "lucide-react";
 
 export const tagColors: Record<string, string> = {
 	"For Sale": "bg-[#162050] text-white",
@@ -155,5 +156,64 @@ export const listings: Listing[] = [
 		type: "Apartment",
 		featured: false,
 		image: "https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=800&q=80",
+	},
+];
+
+export const FEATURED_CARDS = [
+	{
+		title: "Chelsea Townhouse",
+		price: "£3,200,000",
+		beds: 4,
+		baths: 3,
+		tag: "For Sale",
+		tagColor: "bg-emerald-500",
+		icon: Home,
+		delay: "0s",
+		top: "8%",
+		right: "2%",
+		width: "260px",
+	},
+	{
+		title: "Canary Wharf Flat",
+		price: "£2,850 / mo",
+		beds: 2,
+		baths: 1,
+		tag: "To Let",
+		tagColor: "bg-blue-500",
+		icon: Building2,
+		delay: "0.4s",
+		top: "42%",
+		right: "10%",
+		width: "240px",
+	},
+	{
+		title: "Kensington Garden Apt",
+		price: "£1,750,000",
+		beds: 3,
+		baths: 2,
+		tag: "New",
+		tagColor: "bg-amber-500",
+		icon: Star,
+		delay: "0.8s",
+		top: "70%",
+		right: "4%",
+		width: "252px",
+	},
+];
+
+export const STAT_BADGES = [
+	{
+		label: "Avg. London Price",
+		value: "£685k",
+		top: "20%",
+		left: "62%",
+		delay: "0.2s",
+	},
+	{
+		label: "Properties Listed",
+		value: "12,400+",
+		top: "55%",
+		left: "58%",
+		delay: "1s",
 	},
 ];
