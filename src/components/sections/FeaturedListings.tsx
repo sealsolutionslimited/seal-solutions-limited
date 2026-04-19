@@ -1,15 +1,24 @@
 "use client";
-import { categoryTabs, listings } from "@/data/property";
+import { categoryTabs } from "@/data/property";
 import { useState } from "react";
 import { PropertyCard } from "../shared/PropertyCard";
 import { ChevronRight } from "lucide-react";
+import { Property } from "../../../sanity.types";
 
-export default function FeaturedListings() {
+interface FeaturedListingsProps {
+	properties: Property[];
+}
+
+export default function FeaturedListings({
+	properties,
+}: FeaturedListingsProps) {
 	const [active, setActive] = useState("All");
-	const [liked, setLiked] = useState<number[]>([]);
+	const [liked, setLiked] = useState<string[]>([]);
 
 	const filtered =
-		active === "All" ? listings : listings.filter((l) => l.tag === active);
+		active === "All"
+			? properties
+			: properties.filter((property) => property.tag === active);
 
 	return (
 		<section id="listings" className="py-24 bg-cream">
@@ -53,10 +62,10 @@ export default function FeaturedListings() {
 					))}
 				</div>
 
-				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
+				<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
 					{filtered.map((listing) => (
 						<PropertyCard
-							key={listing.id}
+							key={listing._id}
 							listing={listing}
 							liked={liked}
 							setLiked={setLiked}

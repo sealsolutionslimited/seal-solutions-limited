@@ -7,14 +7,17 @@ import HowItWorks from "@/components/sections/HowItWorks";
 import Services from "@/components/sections/Services";
 import Stats from "@/components/sections/Stats";
 import Testimonials from "@/components/sections/Testimonials";
+import { getAllProperties } from "@/sanity/lib/property/getAllProperties";
 
-export default function Home() {
+export default async function Home() {
+	const properties = await getAllProperties();
+
 	return (
 		<main className="min-h-screen bg-white">
 			<Navbar />
 			<Hero />
 			<Stats />
-			<FeaturedListings />
+			<FeaturedListings properties={properties} />
 			<Services />
 			<HowItWorks />
 			<Testimonials />

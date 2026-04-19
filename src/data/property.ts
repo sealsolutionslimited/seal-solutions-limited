@@ -81,7 +81,7 @@ export const listings: Listing[] = [
 	},
 	{
 		id: 4,
-		tag: "New Development",
+		tag: "For Rent",
 		price: "£425,000",
 		title: "Contemporary 3-Bedroom Semi-Detached",
 		location: "Didsbury, Manchester",
@@ -146,7 +146,7 @@ export const listings: Listing[] = [
 	},
 	{
 		id: 9,
-		tag: "New Development",
+		tag: "For Rent",
 		price: "£295,000",
 		title: "Modern 2-Bedroom Apartment",
 		location: "Digbeth, Birmingham",

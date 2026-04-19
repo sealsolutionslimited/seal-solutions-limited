@@ -1,6 +1,6 @@
 export interface Listing {
 	id: number;
-	tag: "For Sale" | "For Rent" | "New Development";
+	tag: "For Sale" | "For Rent";
 	price: string;
 	title: string;
 	location: string;
