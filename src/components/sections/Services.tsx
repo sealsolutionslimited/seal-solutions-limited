@@ -97,7 +97,7 @@ export default function Services() {
 										{service.description}
 									</p>
 
-									<div className="mt-5 flex items-center gap-1 text-gold group-hover:text-gold-light text-sm font-semibold transition-colors">
+									{/* <div className="mt-5 flex items-center gap-1 text-gold group-hover:text-gold-light text-sm font-semibold transition-colors">
 										Learn more
 										<svg
 											width="14"
@@ -114,7 +114,7 @@ export default function Services() {
 												strokeLinejoin="round"
 											/>
 										</svg>
-									</div>
+									</div> */}
 								</div>
 							</div>
 						);

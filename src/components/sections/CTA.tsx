@@ -1,6 +1,21 @@
 "use client";
 import { useState } from "react";
-import { Send, CheckCircle } from "lucide-react";
+import { Send, CheckCircle, MapPin, Phone, Mail } from "lucide-react";
+
+const contactDetails = [
+	{
+		icon: MapPin,
+		text: "12 Admiralty Way, Lekki Phase 1, Lagos",
+	},
+	{
+		icon: Phone,
+		text: "+234 123 456 7890",
+	},
+	{
+		icon: Mail,
+		text: "hello@sealsolutions.ng",
+	},
+];
 
 export default function CTA() {
 	const [submitted, setSubmitted] = useState(false);
@@ -20,7 +35,6 @@ export default function CTA() {
 					"linear-gradient(135deg, #0f1a45 0%, #1a2b6b 60%, #2d4090 100%)",
 			}}
 		>
-			{/* Decorative elements */}
 			<div
 				className="absolute -top-24 -right-24 w-96 h-96 rounded-full opacity-10"
 				style={{
@@ -40,16 +54,10 @@ export default function CTA() {
 				<div className="grid lg:grid-cols-2 gap-16 items-center">
 					{/* Left */}
 					<div>
-						<p
-							className="section-label mb-3"
-							style={{ color: "var(--gold)" }}
-						>
+						<p className="section-label mb-3 text-gold">
 							Get In Touch
 						</p>
-						<h2
-							className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight"
-							style={{ fontFamily: "'Playfair Display', serif" }}
-						>
+						<h2 className="text-4xl md:text-5xl font-bold text-white mb-6 leading-tight">
 							Ready to Find Your Dream Property?
 						</h2>
 						<p className="text-white/60 text-base leading-relaxed max-w-md mb-8">
@@ -59,28 +67,25 @@ export default function CTA() {
 						</p>
 
 						<div className="flex flex-col gap-4">
-							{[
-								{
-									icon: "📍",
-									text: "12 Admiralty Way, Lekki Phase 1, Lagos",
-								},
-								{ icon: "📞", text: "+234 123 456 7890" },
-								{ icon: "✉️", text: "hello@sealsolutions.ng" },
-							].map((item, i) => (
-								<div
-									key={i}
-									className="flex items-center gap-3 text-white/70 text-sm"
-								>
-									<span className="text-base">
-										{item.icon}
-									</span>
-									{item.text}
-								</div>
-							))}
+							{contactDetails.map((item, i) => {
+								const Icon = item.icon;
+
+								return (
+									<div
+										key={i}
+										className="flex items-center gap-3 text-white/70 text-sm group"
+									>
+										<Icon className="w-4 h-4 text-gold group-hover:scale-110 transition-transform" />
+										<span className="group-hover:text-white transition-colors">
+											{item.text}
+										</span>
+									</div>
+								);
+							})}
 						</div>
 					</div>
 
-					{/* Right - Form */}
+					{/* Right */}
 					<div
 						className="bg-white rounded-2xl p-8 md:p-10"
 						style={{ boxShadow: "0 24px 80px rgba(0,0,0,0.2)" }}
@@ -91,12 +96,7 @@ export default function CTA() {
 									size={52}
 									className="text-green-500 mx-auto mb-4"
 								/>
-								<h3
-									className="text-2xl font-bold text-navy mb-2"
-									style={{
-										fontFamily: "'Playfair Display', serif",
-									}}
-								>
+								<h3 className="text-2xl font-bold text-navy mb-2">
 									Message Received!
 								</h3>
 								<p className="text-gray-500 text-sm">
@@ -106,12 +106,7 @@ export default function CTA() {
 							</div>
 						) : (
 							<>
-								<h3
-									className="text-2xl font-bold text-navy mb-6"
-									style={{
-										fontFamily: "'Playfair Display', serif",
-									}}
-								>
+								<h3 className="text-2xl font-bold text-navy mb-6">
 									Request a Callback
 								</h3>
 
@@ -214,7 +209,7 @@ export default function CTA() {
 
 									<button
 										type="submit"
-										className="btn-primary flex items-center justify-center gap-2 w-full mt-1"
+										className="bg-navy-dark text-white cursor-pointer rounded-lgflex items-center justify-center gap-2 w-full mt-1"
 										style={{ padding: "14px" }}
 									>
 										<Send size={16} />

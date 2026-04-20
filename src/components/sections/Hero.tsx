@@ -215,7 +215,6 @@ export default function Hero() {
 
 						{/* Search card */}
 						<div className="bg-white rounded-2xl shadow-2xl overflow-visible">
-							{/* Tabs */}
 							<div className="flex border-b border-gray-100 rounded-t-2xl overflow-hidden">
 								{(["buy", "rent"] as const).map((tab) => (
 									<button
@@ -236,7 +235,6 @@ export default function Hero() {
 								))}
 							</div>
 
-							{/* Search fields */}
 							<div className="p-5 flex flex-col md:flex-row gap-3 items-stretch">
 								<Popover
 									open={open && suggestions.length > 0}
