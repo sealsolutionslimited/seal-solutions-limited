@@ -17,7 +17,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-	title: "Seal Solutions — Nigeria's Trusted Property Platform",
+	title: "Seal Solutions — UK's Trusted Property Platform",
 	description:
 		"Buy, sell, rent and manage properties across Nigeria with Seal Solutions — your full-service real estate partner.",
 };

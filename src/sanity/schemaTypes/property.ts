@@ -23,9 +23,9 @@ const propertyType = defineType({
 		defineField({
 			name: "price",
 			title: "Price",
-			type: "string",
-			description: "Example: £1,850,000 or £3,800/mo",
-			validation: (Rule) => Rule.required(),
+			type: "number",
+			description: "Enter numeric value only (e.g. 1850000)",
+			validation: (Rule) => Rule.required().min(0),
 		}),
 		defineField({
 			name: "title",

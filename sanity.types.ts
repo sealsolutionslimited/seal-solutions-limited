@@ -29,7 +29,7 @@ export type Property = {
   _updatedAt: string;
   _rev: string;
   tag?: "For Sale" | "For Rent";
-  price?: string;
+  price?: number;
   title?: string;
   location?: string;
   beds?: number;
@@ -192,11 +192,11 @@ export type AllSanitySchemaTypes =
 
 // Source: src/sanity/lib/property/getAllProperties.ts
 // Variable: ALL_PROPERTIES_QUERY
-// Query: *[_type == "property"] | order(_createdAt desc) {			_id,			tag,			price,			title,			location,			beds,			baths,			sqft,			type,			featured,			image[]{				asset->{					url				},				alt			}		}
+// Query: *[_type == "property"] | order(_createdAt desc) {			_id,			tag,			price,			title,			location,			beds,			baths,			sqft,			type,			featured,			images[]{				asset->{					url				},				alt			}		}
 export type ALL_PROPERTIES_QUERY_RESULT = Array<{
   _id: string;
   tag: "For Rent" | "For Sale" | null;
-  price: string | null;
+  price: number | null;
   title: string | null;
   location: string | null;
   beds: number | null;
@@ -213,13 +213,18 @@ export type ALL_PROPERTIES_QUERY_RESULT = Array<{
     | "Townhouse"
     | null;
   featured: boolean | null;
-  image: null;
+  images: Array<{
+    asset: {
+      url: string | null;
+    } | null;
+    alt: string | null;
+  }> | null;
 }>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n\t\t*[_type == "property"] | order(_createdAt desc) {\n\t\t\t_id,\n\t\t\ttag,\n\t\t\tprice,\n\t\t\ttitle,\n\t\t\tlocation,\n\t\t\tbeds,\n\t\t\tbaths,\n\t\t\tsqft,\n\t\t\ttype,\n\t\t\tfeatured,\n\t\t\timage[]{\n\t\t\t\tasset->{\n\t\t\t\t\turl\n\t\t\t\t},\n\t\t\t\talt\n\t\t\t}\n\t\t}\n\t': ALL_PROPERTIES_QUERY_RESULT;
+    '\n\t\t*[_type == "property"] | order(_createdAt desc) {\n\t\t\t_id,\n\t\t\ttag,\n\t\t\tprice,\n\t\t\ttitle,\n\t\t\tlocation,\n\t\t\tbeds,\n\t\t\tbaths,\n\t\t\tsqft,\n\t\t\ttype,\n\t\t\tfeatured,\n\t\t\timages[]{\n\t\t\t\tasset->{\n\t\t\t\t\turl\n\t\t\t\t},\n\t\t\t\talt\n\t\t\t}\n\t\t}\n\t': ALL_PROPERTIES_QUERY_RESULT;
   }
 }

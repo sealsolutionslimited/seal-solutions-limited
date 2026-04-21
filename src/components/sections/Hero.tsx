@@ -71,6 +71,14 @@ export default function Hero() {
 		};
 	}, [location, fetchSuggestions]);
 
+	const handleSearch = () => {
+		const params = new URLSearchParams();
+		if (location) params.set("location", location);
+		if (activeTab === "rent") params.set("category", "To Let");
+		if (activeTab === "buy") params.set("category", "For Sale");
+		router.push(`/properties?${params.toString()}`);
+	};
+
 	return (
 		<section className="relative min-h-screen flex items-center overflow-hidden">
 			<div className="absolute inset-0 z-0">
@@ -361,7 +369,7 @@ export default function Hero() {
 									style={{
 										fontFamily: "'DM Sans', sans-serif",
 									}}
-									onClick={() => router.push("/properties")}
+									onClick={handleSearch}
 								>
 									<Search size={17} />
 									Search
@@ -498,11 +506,11 @@ export default function Hero() {
 
 			{/* Float animation keyframes */}
 			<style>{`
-        @keyframes floatCard {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-12px); }
-        }
-      `}</style>
+				@keyframes floatCard {
+				0%, 100% { transform: translateY(0px); }
+				50% { transform: translateY(-12px); }
+				}
+			`}</style>
 		</section>
 	);
 }
