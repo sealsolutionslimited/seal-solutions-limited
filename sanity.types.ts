@@ -31,6 +31,7 @@ export type Property = {
   tag?: "For Sale" | "For Rent";
   price?: number;
   title?: string;
+  description?: string;
   location?: string;
   beds?: number;
   baths?: number;
@@ -45,6 +46,7 @@ export type Property = {
     | "Terraced"
     | "Penthouse";
   featured?: boolean;
+  amenities?: Array<string>;
   images?: Array<{
     asset?: SanityImageAssetReference;
     media?: unknown;
@@ -221,10 +223,42 @@ export type ALL_PROPERTIES_QUERY_RESULT = Array<{
   }> | null;
 }>;
 
+// Source: src/sanity/lib/property/getPropertyById.ts
+// Variable: PROPERTY_BY_ID_QUERY
+// Query: *[_type == "property" && _id == $id][0] {			_id,			tag,			price,			title,			location,			beds,			baths,			sqft,			type,			featured,			images[]{				asset->{					url				},				alt			}		}
+export type PROPERTY_BY_ID_QUERY_RESULT = {
+  _id: string;
+  tag: "For Rent" | "For Sale" | null;
+  price: number | null;
+  title: string | null;
+  location: string | null;
+  beds: number | null;
+  baths: number | null;
+  sqft: string | null;
+  type:
+    | "Apartment"
+    | "Detached"
+    | "Flat"
+    | "Manor"
+    | "Penthouse"
+    | "Semi-Detached"
+    | "Terraced"
+    | "Townhouse"
+    | null;
+  featured: boolean | null;
+  images: Array<{
+    asset: {
+      url: string | null;
+    } | null;
+    alt: string | null;
+  }> | null;
+} | null;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     '\n\t\t*[_type == "property"] | order(_createdAt desc) {\n\t\t\t_id,\n\t\t\ttag,\n\t\t\tprice,\n\t\t\ttitle,\n\t\t\tlocation,\n\t\t\tbeds,\n\t\t\tbaths,\n\t\t\tsqft,\n\t\t\ttype,\n\t\t\tfeatured,\n\t\t\timages[]{\n\t\t\t\tasset->{\n\t\t\t\t\turl\n\t\t\t\t},\n\t\t\t\talt\n\t\t\t}\n\t\t}\n\t': ALL_PROPERTIES_QUERY_RESULT;
+    '\n\t\t*[_type == "property" && _id == $id][0] {\n\t\t\t_id,\n\t\t\ttag,\n\t\t\tprice,\n\t\t\ttitle,\n\t\t\tlocation,\n\t\t\tbeds,\n\t\t\tbaths,\n\t\t\tsqft,\n\t\t\ttype,\n\t\t\tfeatured,\n\t\t\timages[]{\n\t\t\t\tasset->{\n\t\t\t\t\turl\n\t\t\t\t},\n\t\t\t\talt\n\t\t\t}\n\t\t}\n\t': PROPERTY_BY_ID_QUERY_RESULT;
   }
 }

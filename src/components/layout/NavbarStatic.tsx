@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Menu, X, Phone } from "lucide-react";
 import Link from "next/link";
 import { brandlogo6 } from "@/assets";
+import { SignInButton, Show, UserButton } from "@clerk/nextjs";
 
 const navLinks = [
 	{ label: "Buy", href: "/properties" },
@@ -34,7 +35,7 @@ export default function NavbarStatic() {
 						<Link
 							key={link.label}
 							href={link.href}
-							className="relative text-sm font-medium tracking-[0.04em] text-gray-900 hover:text-gold transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-gold after:transition-all after:duration-300 hover:after:w-full"
+							className="relative text-sm font-medium tracking-[0.04em] text-gray-900 hover:text-amber-500 transition-colors duration-300 after:content-[''] after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:bg-amber-400 after:transition-all after:duration-300 hover:after:w-full"
 						>
 							{link.label}
 						</Link>
@@ -44,18 +45,32 @@ export default function NavbarStatic() {
 				<div className="hidden md:flex items-center gap-4">
 					<a
 						href="tel:+2341234567890"
-						className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-gold transition-colors"
+						className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-amber-500 transition-colors"
 					>
 						<Phone size={15} />
 						<span>+234 123 456 7890</span>
 					</a>
-					<Link
-						href="/#contact"
-						className="btn-primary"
-						style={{ padding: "10px 22px", fontSize: "13px" }}
-					>
-						List Property
-					</Link>
+
+					<Show when="signed-in">
+						<UserButton appearance={{ elements: { avatarBox: "w-8 h-8" } }} />
+					</Show>
+
+					<Show when="signed-out">
+						<SignInButton mode="modal">
+							<button className="bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold tracking-wide px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
+								List Property
+							</button>
+						</SignInButton>
+					</Show>
+
+					<Show when="signed-in">
+						<Link
+							href="/list-property"
+							className="bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold tracking-wide px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+						>
+							List Property
+						</Link>
+					</Show>
 				</div>
 
 				<button
@@ -78,13 +93,24 @@ export default function NavbarStatic() {
 							{link.label}
 						</Link>
 					))}
-					<Link
-						href="/#contact"
-						className="btn-primary text-center"
-						style={{ padding: "12px 22px", fontSize: "14px" }}
-					>
-						List Property
-					</Link>
+
+					<Show when="signed-out">
+						<SignInButton mode="modal">
+							<button className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg transition-all duration-200 shadow-sm">
+								List Property
+							</button>
+						</SignInButton>
+					</Show>
+
+					<Show when="signed-in">
+						<Link
+							href="/list-property"
+							className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg text-center block transition-all duration-200 shadow-sm"
+							onClick={() => setOpen(false)}
+						>
+							List Property
+						</Link>
+					</Show>
 				</div>
 			)}
 		</nav>

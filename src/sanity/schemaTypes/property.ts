@@ -20,6 +20,7 @@ const propertyType = defineType({
 			},
 			validation: (Rule) => Rule.required(),
 		}),
+
 		defineField({
 			name: "price",
 			title: "Price",
@@ -27,30 +28,51 @@ const propertyType = defineType({
 			description: "Enter numeric value only (e.g. 1850000)",
 			validation: (Rule) => Rule.required().min(0),
 		}),
+
 		defineField({
 			name: "title",
 			title: "Property Title",
 			type: "string",
 			validation: (Rule) => Rule.required().min(5).max(120),
 		}),
+
+		defineField({
+			name: "description",
+			title: "Property Description",
+			type: "text",
+			rows: 5,
+			description:
+				"Write a detailed description of the property including features, amenities, and unique selling points.",
+			validation: (Rule) =>
+				Rule.required()
+					.min(50)
+					.max(500)
+					.error(
+						"Description should be between 50 and 500 characters",
+					),
+		}),
+
 		defineField({
 			name: "location",
 			title: "Location",
 			type: "string",
 			validation: (Rule) => Rule.required(),
 		}),
+
 		defineField({
 			name: "beds",
 			title: "Bedrooms",
 			type: "number",
 			validation: (Rule) => Rule.required().min(0),
 		}),
+
 		defineField({
 			name: "baths",
 			title: "Bathrooms",
 			type: "number",
 			validation: (Rule) => Rule.required().min(0),
 		}),
+
 		defineField({
 			name: "sqft",
 			title: "Square Footage",
@@ -58,6 +80,7 @@ const propertyType = defineType({
 			description: "Example: 3,200 sq ft",
 			validation: (Rule) => Rule.required(),
 		}),
+
 		defineField({
 			name: "type",
 			title: "Property Type",
@@ -76,12 +99,26 @@ const propertyType = defineType({
 			},
 			validation: (Rule) => Rule.required(),
 		}),
+
 		defineField({
 			name: "featured",
 			title: "Featured Property",
 			type: "boolean",
 			initialValue: false,
 		}),
+
+		defineField({
+			name: "amenities",
+			title: "Key Features & Amenities",
+			type: "array",
+			of: [{ type: "string" }],
+			description:
+				'List notable features, e.g. "Private Garden", "Double Garage", "En-suite Bathroom"',
+			options: {
+				layout: "tags",
+			},
+		}),
+
 		defineField({
 			name: "images",
 			title: "Property Images",
@@ -105,11 +142,12 @@ const propertyType = defineType({
 				Rule.required().min(1).error("At least one image is required"),
 		}),
 	],
+
 	preview: {
 		select: {
 			title: "title",
 			subtitle: "location",
-			media: "image",
+			media: "images.0",
 		},
 	},
 });

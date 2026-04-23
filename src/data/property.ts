@@ -37,7 +37,7 @@ export const sortOptions = [
 	"Most Popular",
 ];
 
-export const categoryTabs = ["All", "For Sale", "For Rent", "New Development"];
+export const categoryTabs = ["All", "For Sale", "For Rent"];
 
 export const listings: Listing[] = [
 	{
@@ -45,6 +45,8 @@ export const listings: Listing[] = [
 		tag: "For Sale",
 		price: "£1,850,000",
 		title: "Grand 5-Bedroom Victorian Townhouse",
+		description:
+			"An elegant Victorian townhouse featuring spacious interiors, a private garden, high ceilings, and premium finishes in one of London’s most prestigious neighborhoods.",
 		location: "Kensington, London",
 		beds: 5,
 		baths: 4,
@@ -58,6 +60,8 @@ export const listings: Listing[] = [
 		tag: "For Rent",
 		price: "£3,800/mo",
 		title: "Modern 2-Bedroom City Apartment",
+		description:
+			"A sleek city apartment with floor-to-ceiling windows, modern kitchen fittings, concierge service, and stunning skyline views in Canary Wharf.",
 		location: "Canary Wharf, London",
 		beds: 2,
 		baths: 2,
@@ -71,6 +75,8 @@ export const listings: Listing[] = [
 		tag: "For Sale",
 		price: "£685,000",
 		title: "Charming 4-Bedroom Detached House",
+		description:
+			"A beautifully maintained detached family home with landscaped gardens, spacious living areas, and a peaceful suburban setting in Yorkshire.",
 		location: "Harrogate, Yorkshire",
 		beds: 4,
 		baths: 3,
@@ -84,6 +90,8 @@ export const listings: Listing[] = [
 		tag: "For Rent",
 		price: "£425,000",
 		title: "Contemporary 3-Bedroom Semi-Detached",
+		description:
+			"A stylish semi-detached home offering open-plan living, a modern kitchen, private parking, and excellent transport links in vibrant Manchester.",
 		location: "Didsbury, Manchester",
 		beds: 3,
 		baths: 2,
@@ -97,6 +105,8 @@ export const listings: Listing[] = [
 		tag: "For Rent",
 		price: "£1,600/mo",
 		title: "Stylish 1-Bedroom Period Flat",
+		description:
+			"A charming period flat with original architectural details, bright interiors, and a cozy atmosphere located in the heart of Clifton.",
 		location: "Clifton, Bristol",
 		beds: 1,
 		baths: 1,
@@ -110,6 +120,8 @@ export const listings: Listing[] = [
 		tag: "For Sale",
 		price: "£2,400,000",
 		title: "Stunning 6-Bedroom Country Manor",
+		description:
+			"A luxurious country manor surrounded by rolling countryside, featuring expansive grounds, elegant interiors, and exceptional privacy in the Cotswolds.",
 		location: "Cotswolds, Gloucestershire",
 		beds: 6,
 		baths: 5,
@@ -123,6 +135,8 @@ export const listings: Listing[] = [
 		tag: "For Sale",
 		price: "£340,000",
 		title: "Bright 3-Bedroom Terraced House",
+		description:
+			"A bright and welcoming terraced home with spacious bedrooms, a private backyard, and close proximity to schools, shops, and local parks.",
 		location: "Jesmond, Newcastle",
 		beds: 3,
 		baths: 2,
@@ -136,6 +150,8 @@ export const listings: Listing[] = [
 		tag: "For Rent",
 		price: "£2,200/mo",
 		title: "Penthouse 2-Bedroom Apartment",
+		description:
+			"A premium penthouse apartment offering panoramic city views, luxury finishes, private balcony, and exclusive access to top-tier amenities.",
 		location: "City Centre, Edinburgh",
 		beds: 2,
 		baths: 2,
@@ -149,6 +165,8 @@ export const listings: Listing[] = [
 		tag: "For Rent",
 		price: "£295,000",
 		title: "Modern 2-Bedroom Apartment",
+		description:
+			"A contemporary apartment with smart-home features, open-plan design, secure parking, and easy access to Birmingham’s business district.",
 		location: "Digbeth, Birmingham",
 		beds: 2,
 		baths: 2,

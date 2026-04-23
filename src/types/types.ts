@@ -3,6 +3,7 @@ export interface Listing {
 	tag: "For Sale" | "For Rent";
 	price: string;
 	title: string;
+	description: string;
 	location: string;
 	beds: number;
 	baths: number;
