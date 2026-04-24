@@ -1,5 +1,5 @@
 "use client";
-import { Menu } from "lucide-react";
+import { Menu, LayoutList } from "lucide-react";
 import Link from "next/link";
 import { SignInButton, Show, UserButton } from "@clerk/nextjs";
 import {
@@ -64,6 +64,16 @@ export default function MobileMenu() {
 							{link.label}
 						</Link>
 					))}
+
+					<Show when="signed-in">
+						<Link
+							href="/my-listings"
+							className="flex items-center gap-2.5 text-gray-700 text-sm font-medium px-3 py-3 rounded-lg hover:bg-amber-50 hover:text-amber-600 transition-colors duration-200 tracking-wide"
+						>
+							<LayoutList size={15} />
+							My Listings
+						</Link>
+					</Show>
 				</nav>
 
 				<div className="mx-6 border-t border-gray-100" />
@@ -71,7 +81,15 @@ export default function MobileMenu() {
 				<div className="px-6 py-6 flex flex-col gap-3">
 					<Show when="signed-in">
 						<div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-50">
-							<UserButton />
+							<UserButton>
+								<UserButton.MenuItems>
+									<UserButton.Link
+										label="My Listings"
+										labelIcon={<LayoutList size={16} />}
+										href="/my-listings"
+									/>
+								</UserButton.MenuItems>
+							</UserButton>
 							<span className="text-sm text-gray-600 font-medium">
 								My Account
 							</span>

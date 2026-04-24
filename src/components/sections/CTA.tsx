@@ -1,30 +1,60 @@
 "use client";
+
 import { useState } from "react";
+import { Formik, Form } from "formik";
+import * as Yup from "yup";
 import { Send, CheckCircle, MapPin, Phone, Mail } from "lucide-react";
+import { FormInput } from "@/components/form/FormInput";
+import { FormTextarea } from "@/components/form/FormTextarea";
+import { FormSelect } from "@/components/form/FormSelect";
+import { FormButton } from "@/components/form/FormButton";
 
 const contactDetails = [
 	{
 		icon: MapPin,
-		text: "12 Admiralty Way, Lekki Phase 1, Lagos",
+		text: "112B Brigstock Road, Thornton Heath, Croydon, CR7 7JB",
 	},
 	{
 		icon: Phone,
-		text: "+234 123 456 7890",
+		text: "+44 7879 183213",
 	},
 	{
 		icon: Mail,
-		text: "hello@sealsolutions.ng",
+		text: "sealsolutionslim@gmail.com",
 	},
 ];
 
+const interestOptions = [
+	{ label: "Buy", value: "Buy" },
+	{ label: "Rent", value: "Rent" },
+	{ label: "Sell", value: "Sell" },
+	{ label: "Invest", value: "Invest" },
+];
+
+const validationSchema = Yup.object({
+	name: Yup.string()
+		.min(2, "Name must be at least 2 characters")
+		.required("Full name is required"),
+	phone: Yup.string()
+		.matches(/^[+\d][\d\s\-().]{6,}$/, "Enter a valid phone number")
+		.required("Phone number is required"),
+	interest: Yup.string()
+		.oneOf(["Buy", "Rent", "Sell", "Invest"])
+		.required("Please select an interest"),
+	message: Yup.string().max(500, "Message must be under 500 characters"),
+});
+
+const initialValues = {
+	name: "",
+	phone: "",
+	interest: "",
+	message: "",
+};
+
 export default function CTA() {
 	const [submitted, setSubmitted] = useState(false);
-	const [form, setForm] = useState({ name: "", phone: "", interest: "Buy" });
-
-	const handleSubmit = (e: React.FormEvent) => {
-		e.preventDefault();
-		setSubmitted(true);
-	};
+	const [submittedName, setSubmittedName] = useState("");
+	const [serverError, setServerError] = useState("");
 
 	return (
 		<section
@@ -69,7 +99,6 @@ export default function CTA() {
 						<div className="flex flex-col gap-4">
 							{contactDetails.map((item, i) => {
 								const Icon = item.icon;
-
 								return (
 									<div
 										key={i}
@@ -100,8 +129,8 @@ export default function CTA() {
 									Message Received!
 								</h3>
 								<p className="text-gray-500 text-sm">
-									Thank you, {form.name}. One of our agents
-									will reach out within 24 hours.
+									Thank you, {submittedName}. One of our
+									agents will reach out within 24 hours.
 								</p>
 							</div>
 						) : (
@@ -110,112 +139,93 @@ export default function CTA() {
 									Request a Callback
 								</h3>
 
-								<form
-									onSubmit={handleSubmit}
-									className="flex flex-col gap-4"
+								<Formik
+									initialValues={initialValues}
+									validationSchema={validationSchema}
+									onSubmit={async (
+										values,
+										{ setSubmitting },
+									) => {
+										setServerError("");
+										try {
+											const res = await fetch(
+												"/api/contact",
+												{
+													method: "POST",
+													headers: {
+														"Content-Type":
+															"application/json",
+													},
+													body: JSON.stringify(
+														values,
+													),
+												},
+											);
+
+											if (!res.ok) {
+												const data = await res.json();
+												setServerError(
+													data.error ??
+														"Something went wrong. Please try again.",
+												);
+												return;
+											}
+
+											setSubmittedName(values.name);
+											setSubmitted(true);
+										} catch {
+											setServerError(
+												"Network error. Please check your connection and try again.",
+											);
+										} finally {
+											setSubmitting(false);
+										}
+									}}
 								>
-									<div>
-										<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-											Full Name
-										</label>
-										<input
+									<Form className="flex flex-col gap-4">
+										<FormInput
+											name="name"
+											label="Full Name"
 											type="text"
-											required
-											value={form.name}
-											onChange={(e) =>
-												setForm({
-													...form,
-													name: e.target.value,
-												})
-											}
 											placeholder="e.g. Adaora Okonkwo"
-											className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-navy transition-colors"
-											style={{
-												fontFamily:
-													"'DM Sans', sans-serif",
-											}}
 										/>
-									</div>
 
-									<div>
-										<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-											Phone Number
-										</label>
-										<input
+										<FormInput
+											name="phone"
+											label="Phone Number"
 											type="tel"
-											required
-											value={form.phone}
-											onChange={(e) =>
-												setForm({
-													...form,
-													phone: e.target.value,
-												})
-											}
-											placeholder="+234 800 000 0000"
-											className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-navy transition-colors"
-											style={{
-												fontFamily:
-													"'DM Sans', sans-serif",
-											}}
+											placeholder="+44 7099 100210"
 										/>
-									</div>
 
-									<div>
-										<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-											I&apos;m looking to
-										</label>
-										<div className="flex gap-2 flex-wrap">
-											{[
-												"Buy",
-												"Rent",
-												"Sell",
-												"Invest",
-											].map((opt) => (
-												<button
-													key={opt}
-													type="button"
-													onClick={() =>
-														setForm({
-															...form,
-															interest: opt,
-														})
-													}
-													className={`px-4 py-2 rounded-full text-sm font-semibold transition-all border ${
-														form.interest === opt
-															? "bg-navy text-white border-navy"
-															: "border-gray-200 text-gray-500 hover:border-navy"
-													}`}
-												>
-													{opt}
-												</button>
-											))}
-										</div>
-									</div>
+										<FormSelect
+											name="interest"
+											label="I'm looking to"
+											placeholder="Select an option"
+											options={interestOptions}
+										/>
 
-									<div>
-										<label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1.5">
-											Message (optional)
-										</label>
-										<textarea
+										<FormTextarea
+											name="message"
+											label="Message (optional)"
 											rows={3}
 											placeholder="Tell us more about what you're looking for..."
-											className="w-full border border-gray-200 rounded-lg px-4 py-3 text-sm outline-none focus:border-navy transition-colors resize-none"
-											style={{
-												fontFamily:
-													"'DM Sans', sans-serif",
-											}}
 										/>
-									</div>
 
-									<button
-										type="submit"
-										className="bg-navy-dark text-white cursor-pointer rounded-lgflex items-center justify-center gap-2 w-full mt-1"
-										style={{ padding: "14px" }}
-									>
-										<Send size={16} />
-										Send Message
-									</button>
-								</form>
+										{serverError && (
+											<p className="text-xs text-red-500 -mt-1">
+												{serverError}
+											</p>
+										)}
+
+										<FormButton
+											className="bg-navy-dark hover:bg-navy text-white mt-1"
+											loadingText="Sending..."
+										>
+											<Send size={16} />
+											Send Message
+										</FormButton>
+									</Form>
+								</Formik>
 							</>
 						)}
 					</div>

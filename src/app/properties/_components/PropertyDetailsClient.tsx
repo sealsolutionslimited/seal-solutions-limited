@@ -29,13 +29,13 @@ import { cn } from "@/lib/utils";
 import { urlFor } from "@/sanity/lib/image";
 import { formatToPounds } from "@/lib/helper";
 import { tagColors } from "@/data/property";
-import { Property } from "../../../../sanity.types";
+import { PropertyListing } from "@/types/listings";
 import NavbarStatic from "@/components/layout/NavbarStatic";
 import Footer from "@/components/layout/Footer";
 
 interface PropertyDetailsClientProps {
-	property: Property;
-	similarProperties?: Property[];
+	property: PropertyListing;
+	similarProperties?: PropertyListing[];
 }
 
 export default function PropertyDetailsClient({
@@ -50,6 +50,7 @@ export default function PropertyDetailsClient({
 
 	const images = property.images ?? [];
 	const totalImages = images.length;
+	const isUserListing = property._type === "userListing";
 
 	const openLightbox = (index: number) => {
 		setLightboxIndex(index);
@@ -294,7 +295,7 @@ export default function PropertyDetailsClient({
 						<div className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-gray-100 shadow-sm">
 							<div>
 								<p className="text-2xl font-bold text-[#162050]">
-									{formatToPounds(property.price)}
+									{formatToPounds(property.price ?? undefined)}
 								</p>
 								{property.tag === "For Rent" && (
 									<p className="text-xs text-gray-400 mt-0.5">
@@ -386,7 +387,7 @@ export default function PropertyDetailsClient({
 										About This Property
 									</h2>
 								</div>
-								<p className="text-gray-600 leading-relaxed text-sm whitespace-pre-line">
+								<p className="text-gray-600 leading-relaxed text-sm whitespace-pre-line wrap-break-word">
 									{property.description as string}
 								</p>
 							</div>
@@ -457,31 +458,57 @@ export default function PropertyDetailsClient({
 							</div>
 						</div>
 
-						{/* Agent CTAs */}
-						<div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2.5">
-							<Button className="w-full bg-[#162050] hover:bg-[#1e2e6e] text-white gap-2 h-11 rounded-xl font-semibold text-sm">
-								<Phone size={15} /> Call Agent
-							</Button>
-							<Button
-								variant="outline"
-								className="w-full border-[#162050] text-[#162050] hover:bg-[#162050] hover:text-white gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
-							>
-								<Mail size={15} /> Send Enquiry
-							</Button>
-							<Button
-								variant="outline"
-								className="w-full border-gray-200 text-gray-600 hover:border-[#162050] hover:text-[#162050] gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
-							>
-								<Calendar size={15} /> Book Viewing
-							</Button>
-						</div>
+						{/* Contact card */}
+						{isUserListing ? (
+							<div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-3">
+								<p className="text-xs font-semibold text-gray-400 uppercase tracking-widest">
+									Contact the Owner
+								</p>
+								{property.contactPhone && (
+									<a
+										href={`tel:${property.contactPhone}`}
+										className="flex items-center gap-3 w-full h-11 px-4 rounded-xl bg-[#162050] text-white font-semibold text-sm hover:bg-[#1e2e6e] transition-colors"
+									>
+										<Phone size={15} />
+										{property.contactPhone}
+									</a>
+								)}
+								{property.contactEmail && (
+									<a
+										href={`mailto:${property.contactEmail}`}
+										className="flex items-center gap-3 w-full h-11 px-4 rounded-xl border border-[#162050] text-[#162050] font-semibold text-sm hover:bg-[#162050] hover:text-white transition-all"
+									>
+										<Mail size={15} />
+										{property.contactEmail}
+									</a>
+								)}
+							</div>
+						) : (
+							<div className="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm space-y-2.5">
+								<Button className="w-full bg-[#162050] hover:bg-[#1e2e6e] text-white gap-2 h-11 rounded-xl font-semibold text-sm">
+									<Phone size={15} /> Call Agent
+								</Button>
+								<Button
+									variant="outline"
+									className="w-full border-[#162050] text-[#162050] hover:bg-[#162050] hover:text-white gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
+								>
+									<Mail size={15} /> Send Enquiry
+								</Button>
+								<Button
+									variant="outline"
+									className="w-full border-gray-200 text-gray-600 hover:border-[#162050] hover:text-[#162050] gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
+								>
+									<Calendar size={15} /> Book Viewing
+								</Button>
+							</div>
+						)}
 					</div>
 				</div>
 
 				{/* ════════════════════════════════════════
 				    DESKTOP
 				════════════════════════════════════════ */}
-				<div className="hidden md:block pt-24">
+				<div className="hidden md:block py-24">
 					<div className="max-w-7xl mx-auto px-6">
 						{/* Breadcrumb */}
 						<div className="flex items-center gap-2 text-xs text-gray-400 mb-5">
@@ -539,85 +566,268 @@ export default function PropertyDetailsClient({
 							</p>
 						</div>
 
-						{/* ── Gallery | Sidebar ── */}
-						<div className="grid grid-cols-[3fr_2fr] gap-5 items-start">
-							{/* Gallery — no thumbnails, taller image fills the space */}
-							<div
-								className="relative w-full aspect-3/2 rounded-2xl overflow-hidden cursor-pointer group bg-gray-100"
-								onClick={() => openLightbox(activeImage)}
-							>
-								{images[activeImage] ? (
-									<Image
-										src={urlFor(images[activeImage]).url()}
-										alt={property.title ?? "Property"}
-										fill
-										className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
-										priority
-										sizes="(max-width: 1280px) 60vw, 768px"
-									/>
-								) : (
-									<div className="w-full h-full flex items-center justify-center">
-										<Home
-											size={56}
-											className="text-gray-300"
+						{/* ── Gallery + Content | Sidebar ── */}
+						<div className="grid grid-cols-[3fr_2fr] gap-6 items-start">
+							{/* Left column — gallery then content */}
+							<div className="flex flex-col gap-6">
+								{/* Main gallery image */}
+								<div
+									className="relative w-full aspect-3/2 rounded-2xl overflow-hidden cursor-pointer group bg-gray-100"
+									onClick={() => openLightbox(activeImage)}
+								>
+									{images[activeImage] ? (
+										<Image
+											src={urlFor(
+												images[activeImage],
+											).url()}
+											alt={property.title ?? "Property"}
+											fill
+											className="object-cover transition-transform duration-700 group-hover:scale-[1.02]"
+											priority
+											sizes="(max-width: 1280px) 60vw, 768px"
 										/>
+									) : (
+										<div className="w-full h-full flex items-center justify-center">
+											<Home
+												size={56}
+												className="text-gray-300"
+											/>
+										</div>
+									)}
+									<div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+
+									{totalImages > 1 && (
+										<>
+											<button
+												onClick={(e) => {
+													e.stopPropagation();
+													prevImage();
+												}}
+												className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/65 transition-all opacity-0 group-hover:opacity-100"
+											>
+												<ChevronLeft size={20} />
+											</button>
+											<button
+												onClick={(e) => {
+													e.stopPropagation();
+													nextImage();
+												}}
+												className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/65 transition-all opacity-0 group-hover:opacity-100"
+											>
+												<ChevronRight size={20} />
+											</button>
+										</>
+									)}
+									<div className="absolute top-4 left-4">
+										<span className="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium">
+											{activeImage + 1} /{" "}
+											{totalImages || 1}
+										</span>
 									</div>
-								)}
-								<div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
-
-								{totalImages > 1 && (
-									<>
-										<button
-											onClick={(e) => {
-												e.stopPropagation();
-												prevImage();
-											}}
-											className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/65 transition-all opacity-0 group-hover:opacity-100"
-										>
-											<ChevronLeft size={20} />
-										</button>
-										<button
-											onClick={(e) => {
-												e.stopPropagation();
-												nextImage();
-											}}
-											className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center text-white hover:bg-black/65 transition-all opacity-0 group-hover:opacity-100"
-										>
-											<ChevronRight size={20} />
-										</button>
-									</>
-								)}
-
-								<div className="absolute top-4 left-4">
-									<span className="bg-black/50 backdrop-blur-sm text-white text-xs px-3 py-1.5 rounded-full font-medium">
-										{activeImage + 1} / {totalImages || 1}
-									</span>
+									{totalImages > 1 && (
+										<div className="absolute bottom-4 right-4">
+											<button
+												onClick={(e) => {
+													e.stopPropagation();
+													openLightbox(0);
+												}}
+												className="flex items-center gap-2 bg-white/90 backdrop-blur-sm hover:bg-white text-[#162050] text-sm font-semibold px-4 py-2 rounded-xl transition-colors shadow-md"
+											>
+												<Grid2X2 size={14} />
+												All {totalImages} photos
+											</button>
+										</div>
+									)}
 								</div>
 
-								{totalImages > 1 && (
-									<div className="absolute bottom-4 right-4">
-										<button
-											onClick={(e) => {
-												e.stopPropagation();
-												openLightbox(0);
-											}}
-											className="flex items-center gap-2 bg-white/90 backdrop-blur-sm hover:bg-white text-[#162050] text-sm font-semibold px-4 py-2 rounded-xl transition-colors shadow-md"
+								{/* Stats row */}
+								<div className="grid grid-cols-3 gap-4">
+									{[
+										{
+											icon: Bed,
+											label: "Bedrooms",
+											value: property.beds,
+										},
+										{
+											icon: Bath,
+											label: "Bathrooms",
+											value: property.baths,
+										},
+										{
+											icon: Maximize,
+											label: "Floor Area",
+											value: property.sqft,
+										},
+									].map(({ icon: Icon, label, value }) => (
+										<div
+											key={label}
+											className="bg-white rounded-2xl p-5 flex flex-col items-center gap-2 border border-gray-100 shadow-sm text-center"
 										>
-											<Grid2X2 size={14} />
-											All {totalImages} photos
-										</button>
+											<div
+												className="w-10 h-10 rounded-xl flex items-center justify-center"
+												style={{
+													background:
+														"rgba(22,32,80,0.07)",
+												}}
+											>
+												<Icon
+													size={19}
+													className="text-[#162050]"
+												/>
+											</div>
+											<div>
+												<p className="text-lg font-bold text-[#162050] leading-none">
+													{value ?? "—"}
+												</p>
+												<p className="text-xs text-gray-400 mt-0.5">
+													{label}
+												</p>
+											</div>
+										</div>
+									))}
+								</div>
+
+								{/* Description */}
+								{property.description && (
+									<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+										<div className="flex items-center gap-3 mb-5">
+											<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
+											<h2
+												className="text-xl font-bold text-[#162050]"
+												style={{
+													fontFamily:
+														"'Playfair Display', serif",
+												}}
+											>
+												About This Property
+											</h2>
+										</div>
+										{/* <p className="text-gray-600 leading-relaxed text-base whitespace-pre-line wrap-break-word"> */}
+										<p className="text-gray-600 leading-relaxed text-base whitespace-pre-line break-all">
+											{property.description as string}
+										</p>
 									</div>
 								)}
+
+								{/* Key Features / Amenities */}
+								{property.amenities &&
+									property.amenities.length > 0 && (
+										<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+											<div className="flex items-center gap-3 mb-5">
+												<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
+												<h2
+													className="text-xl font-bold text-[#162050]"
+													style={{
+														fontFamily:
+															"'Playfair Display', serif",
+													}}
+												>
+													Key Features
+												</h2>
+											</div>
+											<ul className="grid grid-cols-2 gap-x-8 gap-y-3">
+												{property.amenities.map(
+													(amenity, i) => (
+														<li
+															key={i}
+															className="flex items-start gap-2.5 text-sm text-gray-700"
+														>
+															<CheckCircle2
+																size={16}
+																className="text-amber-500 shrink-0 mt-0.5"
+															/>
+															{amenity}
+														</li>
+													),
+												)}
+											</ul>
+										</div>
+									)}
+
+								{/* Property Details table */}
+								<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
+									<div className="flex items-center gap-3 mb-5">
+										<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
+										<h2
+											className="text-xl font-bold text-[#162050]"
+											style={{
+												fontFamily:
+													"'Playfair Display', serif",
+											}}
+										>
+											Property Details
+										</h2>
+									</div>
+									<div className="divide-y divide-gray-100">
+										{overviewRows.map(
+											({ label, value }) => (
+												<div
+													key={label}
+													className="flex justify-between items-center py-3 text-sm"
+												>
+													<span className="text-gray-500 font-medium">
+														{label}
+													</span>
+													<span className="font-semibold text-[#162050]">
+														{value}
+													</span>
+												</div>
+											),
+										)}
+									</div>
+								</div>
+
+								{/* Location */}
+								<div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
+									<div className="px-8 pt-6 pb-4 flex items-center gap-3">
+										<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
+										<div>
+											<h2
+												className="text-xl font-bold text-[#162050]"
+												style={{
+													fontFamily:
+														"'Playfair Display', serif",
+												}}
+											>
+												Location
+											</h2>
+											<p className="text-sm text-gray-500 mt-0.5">
+												{property.location}
+											</p>
+										</div>
+									</div>
+									<div
+										className="w-full flex items-center justify-center"
+										style={{
+											height: 240,
+											background:
+												"linear-gradient(135deg,#e8e4d8 0%,#d4cebc 100%)",
+										}}
+									>
+										<div className="text-center">
+											<MapPin
+												size={30}
+												className="mx-auto mb-2 text-amber-500"
+											/>
+											<p className="text-sm font-semibold text-gray-600">
+												{property.location}
+											</p>
+											<p className="text-xs text-gray-400 mt-1">
+												Map embed goes here
+											</p>
+										</div>
+									</div>
+								</div>
 							</div>
 
-							{/* Sidebar */}
+							{/* Right — sticky sidebar */}
 							<div className="sticky top-24 flex flex-col gap-4">
 								{/* Price */}
 								<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
 									<div className="flex items-start justify-between mb-1">
 										<div>
 											<p className="text-3xl font-bold text-[#162050]">
-												{formatToPounds(property.price)}
+												{formatToPounds(property.price ?? undefined)}
 											</p>
 											{property.tag === "For Rent" && (
 												<p className="text-xs text-gray-400 mt-0.5">
@@ -660,60 +870,86 @@ export default function PropertyDetailsClient({
 									</div>
 								</div>
 
-								{/* Agent + CTAs */}
-								<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
-									<p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
-										Listed by
-									</p>
-									<div className="flex items-center gap-3 mb-5">
-										<div
-											className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-base shrink-0"
-											style={{
-												background:
-													"linear-gradient(135deg,#162050,#1e3070)",
-											}}
-										>
-											SS
+								{/* Contact card */}
+								{isUserListing ? (
+									<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+										<p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+											Contact the Owner
+										</p>
+										<div className="space-y-2.5">
+											{property.contactPhone && (
+												<a
+													href={`tel:${property.contactPhone}`}
+													className="flex items-center gap-2 w-full bg-[#162050] hover:bg-[#1e2e6e] text-white h-11 rounded-xl font-semibold text-sm px-4 transition-colors"
+												>
+													<Phone size={15} />
+													{property.contactPhone}
+												</a>
+											)}
+											{property.contactEmail && (
+												<a
+													href={`mailto:${property.contactEmail}`}
+													className="flex items-center gap-2 w-full border border-[#162050] text-[#162050] hover:bg-[#162050] hover:text-white h-11 rounded-xl font-semibold text-sm px-4 transition-all"
+												>
+													<Mail size={15} />
+													{property.contactEmail}
+												</a>
+											)}
 										</div>
-										<div>
-											<p className="font-bold text-[#162050] text-sm">
-												Seal Solutions
-											</p>
-											<div className="flex items-center gap-0.5 mt-0.5">
-												{[...Array(5)].map((_, i) => (
-													<Star
-														key={i}
-														size={11}
-														className="fill-amber-400 text-amber-400"
-													/>
-												))}
-												<span className="text-xs text-gray-400 ml-1.5">
-													5.0 (124)
-												</span>
+									</div>
+								) : (
+									<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+										<p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">
+											Listed by
+										</p>
+										<div className="flex items-center gap-3 mb-5">
+											<div
+												className="w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-base shrink-0"
+												style={{
+													background:
+														"linear-gradient(135deg,#162050,#1e3070)",
+												}}
+											>
+												SS
+											</div>
+											<div>
+												<p className="font-bold text-[#162050] text-sm">
+													Seal Solutions
+												</p>
+												<div className="flex items-center gap-0.5 mt-0.5">
+													{[...Array(5)].map((_, i) => (
+														<Star
+															key={i}
+															size={11}
+															className="fill-amber-400 text-amber-400"
+														/>
+													))}
+													<span className="text-xs text-gray-400 ml-1.5">
+														5.0 (124)
+													</span>
+												</div>
 											</div>
 										</div>
+										<Separator className="mb-5" />
+										<div className="space-y-2.5">
+											<Button className="w-full bg-[#162050] hover:bg-[#1e2e6e] text-white gap-2 h-11 rounded-xl font-semibold text-sm">
+												<Phone size={15} /> Call Agent
+											</Button>
+											<Button
+												variant="outline"
+												className="w-full border-[#162050] text-[#162050] hover:bg-[#162050] hover:text-white gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
+											>
+												<Mail size={15} /> Send Enquiry
+											</Button>
+											<Button
+												variant="outline"
+												className="w-full border-gray-200 text-gray-600 hover:border-[#162050] hover:text-[#162050] gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
+											>
+												<Calendar size={15} /> Book Viewing
+											</Button>
+										</div>
 									</div>
-
-									<Separator className="mb-5" />
-
-									<div className="space-y-2.5">
-										<Button className="w-full bg-[#162050] hover:bg-[#1e2e6e] text-white gap-2 h-11 rounded-xl font-semibold text-sm">
-											<Phone size={15} /> Call Agent
-										</Button>
-										<Button
-											variant="outline"
-											className="w-full border-[#162050] text-[#162050] hover:bg-[#162050] hover:text-white gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
-										>
-											<Mail size={15} /> Send Enquiry
-										</Button>
-										<Button
-											variant="outline"
-											className="w-full border-gray-200 text-gray-600 hover:border-[#162050] hover:text-[#162050] gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
-										>
-											<Calendar size={15} /> Book Viewing
-										</Button>
-									</div>
-								</div>
+								)}
 
 								{/* At a Glance */}
 								<div
@@ -789,185 +1025,6 @@ export default function PropertyDetailsClient({
 											</li>
 										)}
 									</ul>
-								</div>
-							</div>
-						</div>
-
-						{/* ── Property content below gallery ── */}
-						<div className="mt-10 space-y-6">
-							{/* Stats */}
-							<div className="grid grid-cols-3 gap-4">
-								{[
-									{
-										icon: Bed,
-										label: "Bedrooms",
-										value: property.beds,
-									},
-									{
-										icon: Bath,
-										label: "Bathrooms",
-										value: property.baths,
-									},
-									{
-										icon: Maximize,
-										label: "Floor Area",
-										value: property.sqft,
-									},
-								].map(({ icon: Icon, label, value }) => (
-									<div
-										key={label}
-										className="bg-white rounded-2xl p-5 flex flex-col items-center gap-2 border border-gray-100 shadow-sm text-center"
-									>
-										<div
-											className="w-10 h-10 rounded-xl flex items-center justify-center"
-											style={{
-												background:
-													"rgba(22,32,80,0.07)",
-											}}
-										>
-											<Icon
-												size={19}
-												className="text-[#162050]"
-											/>
-										</div>
-										<div>
-											<p className="text-lg font-bold text-[#162050] leading-none">
-												{value ?? "—"}
-											</p>
-											<p className="text-xs text-gray-400 mt-0.5">
-												{label}
-											</p>
-										</div>
-									</div>
-								))}
-							</div>
-
-							{/* Description */}
-							{property.description && (
-								<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-									<div className="flex items-center gap-3 mb-5">
-										<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-										<h2
-											className="text-xl font-bold text-[#162050]"
-											style={{
-												fontFamily:
-													"'Playfair Display', serif",
-											}}
-										>
-											About This Property
-										</h2>
-									</div>
-									<p className="text-gray-600 leading-relaxed text-base whitespace-pre-line">
-										{property.description as string}
-									</p>
-								</div>
-							)}
-
-							{/* Key Features */}
-							{property.amenities &&
-								property.amenities.length > 0 && (
-									<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-										<div className="flex items-center gap-3 mb-5">
-											<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-											<h2
-												className="text-xl font-bold text-[#162050]"
-												style={{
-													fontFamily:
-														"'Playfair Display', serif",
-												}}
-											>
-												Key Features
-											</h2>
-										</div>
-										<ul className="grid grid-cols-2 gap-x-8 gap-y-3">
-											{property.amenities.map(
-												(amenity, i) => (
-													<li
-														key={i}
-														className="flex items-start gap-2.5 text-sm text-gray-700"
-													>
-														<CheckCircle2
-															size={16}
-															className="text-amber-500 shrink-0 mt-0.5"
-														/>
-														{amenity}
-													</li>
-												),
-											)}
-										</ul>
-									</div>
-								)}
-
-							{/* Property Details table */}
-							<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
-								<div className="flex items-center gap-3 mb-5">
-									<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-									<h2
-										className="text-xl font-bold text-[#162050]"
-										style={{
-											fontFamily:
-												"'Playfair Display', serif",
-										}}
-									>
-										Property Details
-									</h2>
-								</div>
-								<div className="divide-y divide-gray-100">
-									{overviewRows.map(({ label, value }) => (
-										<div
-											key={label}
-											className="flex justify-between items-center py-3 text-sm"
-										>
-											<span className="text-gray-500 font-medium">
-												{label}
-											</span>
-											<span className="font-semibold text-[#162050]">
-												{value}
-											</span>
-										</div>
-									))}
-								</div>
-							</div>
-
-							{/* Location */}
-							<div className="bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm">
-								<div className="px-8 pt-6 pb-4 flex items-center gap-3">
-									<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-									<div>
-										<h2
-											className="text-xl font-bold text-[#162050]"
-											style={{
-												fontFamily:
-													"'Playfair Display', serif",
-											}}
-										>
-											Location
-										</h2>
-										<p className="text-sm text-gray-500 mt-0.5">
-											{property.location}
-										</p>
-									</div>
-								</div>
-								<div
-									className="w-full flex items-center justify-center"
-									style={{
-										height: 240,
-										background:
-											"linear-gradient(135deg,#e8e4d8 0%,#d4cebc 100%)",
-									}}
-								>
-									<div className="text-center">
-										<MapPin
-											size={30}
-											className="mx-auto mb-2 text-amber-500"
-										/>
-										<p className="text-sm font-semibold text-gray-600">
-											{property.location}
-										</p>
-										<p className="text-xs text-gray-400 mt-1">
-											Map embed goes here
-										</p>
-									</div>
 								</div>
 							</div>
 						</div>
@@ -1061,7 +1118,7 @@ export default function PropertyDetailsClient({
 											</div>
 											<div className="pt-3 flex items-center justify-between">
 												<span className="text-base font-bold text-[#162050]">
-													{formatToPounds(p.price)}
+													{formatToPounds(p.price ?? undefined)}
 												</span>
 												<span className="text-xs font-semibold text-[#162050] border border-[#162050] rounded-full px-3 py-1 group-hover:bg-[#162050] group-hover:text-white transition-all">
 													View

@@ -2,9 +2,13 @@ import { client } from "../client";
 import { groq } from "next-sanity";
 
 export const getPropertyById = async (id: string) => {
-	const PROPERTY_BY_ID_QUERY = groq`
-		*[_type == "property" && _id == $id][0] {
+	const QUERY = groq`
+		*[
+			(_type == "property" || _type == "userListing") &&
+			_id == $id
+		][0] {
 			_id,
+			_type,
 			tag,
 			price,
 			title,
@@ -14,7 +18,15 @@ export const getPropertyById = async (id: string) => {
 			sqft,
 			type,
 			featured,
+			description,
+			amenities,
+			status,
+			userId,
+			contactEmail,
+			contactPhone,
+			plan,
 			images[]{
+				_key,
 				asset->{
 					url
 				},
@@ -23,13 +35,5 @@ export const getPropertyById = async (id: string) => {
 		}
 	`;
 
-	return client.fetch(
-		PROPERTY_BY_ID_QUERY,
-		{ id },
-		{
-			next: {
-				revalidate: 10,
-			},
-		},
-	);
+	return client.fetch(QUERY, { id }, { next: { revalidate: 10 } });
 };

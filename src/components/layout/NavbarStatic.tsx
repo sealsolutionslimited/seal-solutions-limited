@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from "next/image";
-import { Menu, X, Phone } from "lucide-react";
+import { Menu, X, LayoutList } from "lucide-react";
 import Link from "next/link";
 import { brandlogo6 } from "@/assets";
 import { SignInButton, Show, UserButton } from "@clerk/nextjs";
@@ -43,16 +43,18 @@ export default function NavbarStatic() {
 				</div>
 
 				<div className="hidden md:flex items-center gap-4">
-					<a
-						href="tel:+2341234567890"
-						className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-amber-500 transition-colors"
-					>
-						<Phone size={15} />
-						<span>+234 123 456 7890</span>
-					</a>
-
 					<Show when="signed-in">
-						<UserButton appearance={{ elements: { avatarBox: "w-8 h-8" } }} />
+						<UserButton
+							appearance={{ elements: { avatarBox: "w-8 h-8" } }}
+						>
+							<UserButton.MenuItems>
+								<UserButton.Link
+									label="My Listings"
+									labelIcon={<LayoutList size={16} />}
+									href="/my-listings"
+								/>
+							</UserButton.MenuItems>
+						</UserButton>
 					</Show>
 
 					<Show when="signed-out">
@@ -100,6 +102,16 @@ export default function NavbarStatic() {
 								List Property
 							</button>
 						</SignInButton>
+					</Show>
+
+					<Show when="signed-in">
+						<Link
+							href="/my-listings"
+							className="text-sm font-medium text-gray-700 hover:text-[#162050]"
+							onClick={() => setOpen(false)}
+						>
+							My Listings
+						</Link>
 					</Show>
 
 					<Show when="signed-in">

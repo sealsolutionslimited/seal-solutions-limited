@@ -1,35 +1,36 @@
 import { client } from "../client";
 import { groq } from "next-sanity";
 
+const FIELDS = `
+	_id,
+	_type,
+	tag,
+	price,
+	title,
+	location,
+	beds,
+	baths,
+	sqft,
+	type,
+	featured,
+	images[]{
+		_key,
+		asset->{
+			url
+		},
+		alt
+	}
+`;
+
 export const getAllProperties = async () => {
-	const ALL_PROPERTIES_QUERY = groq`
-		*[_type == "property"] | order(_createdAt desc) {
-			_id,
-			tag,
-			price,
-			title,
-			location,
-			beds,
-			baths,
-			sqft,
-			type,
-			featured,
-			images[]{
-				asset->{
-					url
-				},
-				alt
-			}
+	const QUERY = groq`
+		*[
+			(_type == "property") ||
+			(_type == "userListing" && status == "active")
+		] | order(_createdAt desc) {
+			${FIELDS}
 		}
 	`;
 
-	return client.fetch(
-		ALL_PROPERTIES_QUERY,
-		{},
-		{
-			next: {
-				revalidate: 10,
-			},
-		},
-	);
+	return client.fetch(QUERY, {}, { next: { revalidate: 10 } });
 };

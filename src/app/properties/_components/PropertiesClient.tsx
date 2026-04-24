@@ -16,10 +16,10 @@ import { PropertyCard } from "@/components/shared/PropertyCard";
 import { PropertyListRow } from "@/components/shared/PropertyListRow";
 import NavbarStatic from "@/components/layout/NavbarStatic";
 import Footer from "@/components/layout/Footer";
-import { Property } from "../../../../sanity.types";
+import { PropertyListing } from "@/types/listings";
 
 interface PropertiesClientProps {
-	properties: Property[];
+	properties: PropertyListing[];
 	initialLocation?: string;
 	initialType?: string;
 	initialCategory?: string;

@@ -1,5 +1,5 @@
 import { tagColors } from "@/data/property";
-import { Property } from "../../../sanity.types";
+import { PropertyListing } from "@/types/listings";
 import { Bath, Bed, Heart, MapPin, Maximize } from "lucide-react";
 import Image from "next/image";
 import { urlFor } from "@/sanity/lib/image";
@@ -11,7 +11,7 @@ export function PropertyCard({
 	liked,
 	setLiked,
 }: {
-	listing: Property;
+	listing: PropertyListing;
 	liked: string[];
 	setLiked: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
@@ -105,7 +105,7 @@ export function PropertyCard({
 
 				<div className="flex items-center justify-between pt-4">
 					<span className="text-base font-bold text-[#162050]">
-						{formatToPounds(listing.price)}
+						{formatToPounds(listing.price ?? undefined)}
 					</span>
 
 					{/* <button className="cursor-pointer text-xs font-semibold text-[#162050] border border-[#162050] rounded-full px-4 py-2 hover:bg-[#162050] hover:text-white transition-all">

@@ -1,5 +1,6 @@
 "use client";
 import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, Variants } from "framer-motion";
 import { Search, MapPin, TrendingUp, Bath, BedDouble } from "lucide-react";
 import {
 	Command,
@@ -21,10 +22,39 @@ import {
 	SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { PlaceResult, SuggestionItem } from "@/types/types";
 import { FEATURED_CARDS, STAT_BADGES } from "@/data/property";
+
+const stagger: Variants = {
+	hidden: {},
+	visible: { transition: { staggerChildren: 0.13, delayChildren: 0.15 } },
+};
+
+const fadeUp: Variants = {
+	hidden: { opacity: 0, y: 28 },
+	visible: {
+		opacity: 1,
+		y: 0,
+		transition: { duration: 0.6, ease: [0.22, 1, 0.36, 1] },
+	},
+};
+
+const fadeIn: Variants = {
+	hidden: { opacity: 0 },
+	visible: { opacity: 1, transition: { duration: 0.7 } },
+};
+
+const slideRight: Variants = {
+	hidden: { opacity: 0, x: 48 },
+	visible: {
+		opacity: 1,
+		x: 0,
+		transition: { duration: 0.8, ease: [0.22, 1, 0.36, 1], delay: 0.3 },
+	},
+};
 
 export default function Hero() {
 	const [activeTab, setActiveTab] = useState<"buy" | "rent">("buy");
@@ -33,7 +63,6 @@ export default function Hero() {
 	const [open, setOpen] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
 	const router = useRouter();
 
 	const fetchSuggestions = useCallback(async (query: string) => {
@@ -63,9 +92,7 @@ export default function Hero() {
 
 	useEffect(() => {
 		if (debounceRef.current) clearTimeout(debounceRef.current);
-		debounceRef.current = setTimeout(() => {
-			fetchSuggestions(location);
-		}, 280);
+		debounceRef.current = setTimeout(() => fetchSuggestions(location), 280);
 		return () => {
 			if (debounceRef.current) clearTimeout(debounceRef.current);
 		};
@@ -74,8 +101,7 @@ export default function Hero() {
 	const handleSearch = () => {
 		const params = new URLSearchParams();
 		if (location) params.set("location", location);
-		if (activeTab === "rent") params.set("category", "To Let");
-		if (activeTab === "buy") params.set("category", "For Sale");
+		params.set("category", activeTab === "rent" ? "To Let" : "For Sale");
 		router.push(`/properties?${params.toString()}`);
 	};
 
@@ -178,20 +204,30 @@ export default function Hero() {
 				</div>
 			</div>
 
+			{/* ── Content ── */}
 			<div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20 w-full">
 				<div className="grid lg:grid-cols-2 gap-12 items-center">
-					{/* Left column */}
-					<div className="max-w-2xl">
+					{/* ── Left column ── */}
+					<motion.div
+						className="max-w-2xl"
+						variants={stagger}
+						initial="hidden"
+						animate="visible"
+					>
 						{/* Badge */}
-						<div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8">
+						<motion.div
+							variants={fadeUp}
+							className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 mb-8"
+						>
 							<span className="w-2 h-2 bg-amber-400 rounded-full animate-pulse" />
 							<span className="text-white/80 text-sm font-medium tracking-wide">
 								The UK&apos;s Trusted Property Platform
 							</span>
-						</div>
+						</motion.div>
 
 						{/* Headline */}
-						<h1
+						<motion.h1
+							variants={fadeUp}
 							className="text-white mb-6 leading-tight"
 							style={{
 								fontSize: "clamp(38px, 5.5vw, 70px)",
@@ -209,9 +245,11 @@ export default function Hero() {
 								Perfect
 							</span>{" "}
 							UK Property
-						</h1>
+						</motion.h1>
 
-						<p
+						{/* Subheading */}
+						<motion.p
+							variants={fadeUp}
 							className="text-white/70 text-lg mb-10 max-w-xl leading-relaxed"
 							style={{ fontFamily: "'DM Sans', sans-serif" }}
 						>
@@ -219,10 +257,14 @@ export default function Hero() {
 							Solutions connects you to premium real estate across
 							London and the UK with expert guidance every step of
 							the way.
-						</p>
+						</motion.p>
 
 						{/* Search card */}
-						<div className="bg-white rounded-2xl shadow-2xl overflow-visible">
+						<motion.div
+							variants={fadeUp}
+							className="bg-white rounded-2xl shadow-2xl overflow-visible"
+						>
+							{/* Tabs */}
 							<div className="flex border-b border-gray-100 rounded-t-2xl overflow-hidden">
 								{(["buy", "rent"] as const).map((tab) => (
 									<button
@@ -234,16 +276,15 @@ export default function Hero() {
 												? "bg-[#162050] text-white"
 												: "text-gray-500 hover:text-[#162050] hover:bg-gray-50",
 										)}
-										style={{
-											fontFamily: "'DM Sans', sans-serif",
-										}}
 									>
 										{tab}
 									</button>
 								))}
 							</div>
 
-							<div className="p-5 flex flex-col md:flex-row gap-3 items-stretch">
+							{/* Inputs */}
+							<div className="p-4 flex flex-col gap-3">
+								{/* Location autocomplete */}
 								<Popover
 									open={open && suggestions.length > 0}
 									onOpenChange={setOpen}
@@ -251,18 +292,18 @@ export default function Hero() {
 									<PopoverTrigger asChild>
 										<div
 											className={cn(
-												"flex items-center gap-2 flex-1 border rounded-lg px-4 h-12 cursor-text transition-colors",
+												"flex items-center gap-2 border rounded-lg px-3 h-11 cursor-text transition-colors bg-white",
 												open
-													? "border-[#162050]"
+													? "border-[#162050] ring-3 ring-[#162050]/20"
 													: "border-gray-200",
 											)}
 											onClick={() => setOpen(true)}
 										>
 											<MapPin
-												size={18}
+												size={16}
 												className="text-amber-500 shrink-0"
 											/>
-											<input
+											<Input
 												type="text"
 												placeholder="Search by area, city or postcode..."
 												value={location}
@@ -271,11 +312,7 @@ export default function Hero() {
 													setOpen(true);
 												}}
 												onFocus={() => setOpen(true)}
-												className="flex-1 outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent"
-												style={{
-													fontFamily:
-														"'DM Sans', sans-serif",
-												}}
+												className="flex-1 border-0 shadow-none ring-0 focus-visible:ring-0 p-0 h-auto text-sm placeholder:text-gray-400 bg-transparent"
 											/>
 											{loading && (
 												<div className="w-3 h-3 border-2 border-amber-400 border-t-transparent rounded-full animate-spin shrink-0" />
@@ -324,60 +361,59 @@ export default function Hero() {
 									</PopoverContent>
 								</Popover>
 
-								<Select defaultValue="all">
-									<SelectTrigger
-										className="min-w-37.5 h-12! border-gray-200 text-gray-700 focus:ring-[#162050] focus:border-[#162050]"
-										style={{
-											fontFamily: "'DM Sans', sans-serif",
-										}}
+								{/* Property type + Search button row */}
+								<div className="flex flex-col sm:flex-row gap-3">
+									<Select defaultValue="all">
+										<SelectTrigger className="w-full md:flex-1 h-11 border-gray-200 text-gray-700 focus:ring-[#162050] focus:border-[#162050]">
+											<SelectValue placeholder="All Types" />
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="all">
+												All Types
+											</SelectItem>
+											<SelectItem value="flat">
+												Flat / Apartment
+											</SelectItem>
+											<SelectItem value="house">
+												House
+											</SelectItem>
+											<SelectItem value="terraced">
+												Terraced
+											</SelectItem>
+											<SelectItem value="detached">
+												Detached
+											</SelectItem>
+											<SelectItem value="semi">
+												Semi-Detached
+											</SelectItem>
+											<SelectItem value="commercial">
+												Commercial
+											</SelectItem>
+											<SelectItem value="land">
+												Land
+											</SelectItem>
+											<SelectItem value="bungalow">
+												Bungalow
+											</SelectItem>
+										</SelectContent>
+									</Select>
+
+									<Button
+										className="bg-[#162050] hover:bg-[#1e2e6e] text-white gap-2 px-6 h-11 rounded-lg font-semibold cursor-pointer sm:w-auto w-full"
+										onClick={handleSearch}
 									>
-										<SelectValue placeholder="All Types" />
-									</SelectTrigger>
-									<SelectContent>
-										<SelectItem value="all">
-											All Types
-										</SelectItem>
-										<SelectItem value="flat">
-											Flat / Apartment
-										</SelectItem>
-										<SelectItem value="house">
-											House
-										</SelectItem>
-										<SelectItem value="terraced">
-											Terraced
-										</SelectItem>
-										<SelectItem value="detached">
-											Detached
-										</SelectItem>
-										<SelectItem value="semi">
-											Semi-Detached
-										</SelectItem>
-										<SelectItem value="commercial">
-											Commercial
-										</SelectItem>
-										<SelectItem value="land">
-											Land
-										</SelectItem>
-										<SelectItem value="bungalow">
-											Bungalow
-										</SelectItem>
-									</SelectContent>
-								</Select>
-
-								<Button
-									className="bg-[#162050] hover:bg-[#1e2e6e] text-white gap-2 px-6  h-12 rounded-lg font-semibold cursor-pointer"
-									style={{
-										fontFamily: "'DM Sans', sans-serif",
-									}}
-									onClick={handleSearch}
-								>
-									<Search size={17} />
-									Search
-								</Button>
+										<Search size={16} />
+										Search
+									</Button>
+								</div>
 							</div>
-						</div>
+						</motion.div>
 
-						<div className="flex flex-wrap gap-2 mt-5">
+						{/* Popular tags */}
+						<motion.div
+							variants={fadeUp}
+							className="flex flex-wrap gap-2 mt-5"
+						>
 							<span className="text-white/50 text-sm mr-1 self-center">
 								Popular:
 							</span>
@@ -397,10 +433,16 @@ export default function Hero() {
 									{tag}
 								</button>
 							))}
-						</div>
-					</div>
+						</motion.div>
+					</motion.div>
 
-					<div className="hidden lg:block relative h-140">
+					{/* ── Right column – floating cards ── */}
+					<motion.div
+						className="hidden lg:block relative h-140"
+						variants={slideRight}
+						initial="hidden"
+						animate="visible"
+					>
 						<div
 							className="absolute inset-0 opacity-20 pointer-events-none"
 							style={{
@@ -412,8 +454,15 @@ export default function Hero() {
 						{FEATURED_CARDS.map((card, i) => {
 							const Icon = card.icon;
 							return (
-								<div
+								<motion.div
 									key={i}
+									initial={{ opacity: 0, y: 20 }}
+									animate={{ opacity: 1, y: 0 }}
+									transition={{
+										delay: 0.5 + i * 0.15,
+										duration: 0.6,
+										ease: "easeOut",
+									}}
 									className="absolute bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-4 shadow-xl"
 									style={{
 										top: card.top,
@@ -444,22 +493,27 @@ export default function Hero() {
 									</p>
 									<div className="flex gap-3">
 										<span className="flex items-center gap-1 text-white/60 text-xs">
-											<BedDouble size={12} />
-											{card.beds} beds
+											<BedDouble size={12} /> {card.beds}{" "}
+											beds
 										</span>
 										<span className="flex items-center gap-1 text-white/60 text-xs">
-											<Bath size={12} />
-											{card.baths} baths
+											<Bath size={12} /> {card.baths}{" "}
+											baths
 										</span>
 									</div>
-								</div>
+								</motion.div>
 							);
 						})}
 
-						{/* Stat badges */}
 						{STAT_BADGES.map((badge, i) => (
-							<div
+							<motion.div
 								key={i}
+								initial={{ opacity: 0, scale: 0.9 }}
+								animate={{ opacity: 1, scale: 1 }}
+								transition={{
+									delay: 0.8 + i * 0.12,
+									duration: 0.5,
+								}}
 								className="absolute bg-white/8 backdrop-blur-sm border border-white/15 rounded-xl px-4 py-3"
 								style={{
 									top: badge.top,
@@ -474,11 +528,13 @@ export default function Hero() {
 								<p className="text-white font-bold text-lg leading-none">
 									{badge.value}
 								</p>
-							</div>
+							</motion.div>
 						))}
 
-						{/* Trending badge */}
-						<div
+						<motion.div
+							initial={{ opacity: 0, scale: 0.9 }}
+							animate={{ opacity: 1, scale: 1 }}
+							transition={{ delay: 1.1, duration: 0.5 }}
 							className="absolute bottom-[18%] left-[5%] flex items-center gap-2 bg-emerald-500/20 border border-emerald-400/30 backdrop-blur-sm rounded-full px-4 py-2"
 							style={{
 								animation: "floatCard 8s ease-in-out infinite",
@@ -492,23 +548,27 @@ export default function Hero() {
 							<span className="text-emerald-300 text-xs font-semibold">
 								+12% YoY in London
 							</span>
-						</div>
-					</div>
+						</motion.div>
+					</motion.div>
 				</div>
 			</div>
 
 			{/* Scroll indicator */}
-			<div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce">
+			<motion.div
+				variants={fadeIn}
+				initial="hidden"
+				animate="visible"
+				className="absolute bottom-8 left-1/2 -translate-x-1/2 z-10 animate-bounce"
+			>
 				<div className="w-6 h-10 border-2 border-white/30 rounded-full flex items-start justify-center pt-2">
 					<div className="w-1.5 h-3 bg-white/50 rounded-full" />
 				</div>
-			</div>
+			</motion.div>
 
-			{/* Float animation keyframes */}
 			<style>{`
 				@keyframes floatCard {
-				0%, 100% { transform: translateY(0px); }
-				50% { transform: translateY(-12px); }
+					0%, 100% { transform: translateY(0px); }
+					50% { transform: translateY(-12px); }
 				}
 			`}</style>
 		</section>

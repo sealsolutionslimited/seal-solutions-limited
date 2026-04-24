@@ -2,7 +2,7 @@ import { tagColors } from "@/data/property";
 import { Bath, Bed, Heart, MapPin, Maximize } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { Property } from "../../../sanity.types";
+import { PropertyListing } from "@/types/listings";
 import { urlFor } from "@/sanity/lib/image";
 import { formatToPounds } from "@/lib/helper";
 
@@ -11,7 +11,7 @@ export function PropertyListRow({
 	liked,
 	setLiked,
 }: {
-	listing: Property;
+	listing: PropertyListing;
 	liked: string[];
 	setLiked: React.Dispatch<React.SetStateAction<string[]>>;
 }) {
@@ -111,7 +111,7 @@ export function PropertyListRow({
 						className="text-2xl font-bold text-[#162050]"
 						style={{ fontFamily: "'Playfair Display', serif" }}
 					>
-						{formatToPounds(listing.price)}
+						{formatToPounds(listing.price ?? undefined)}
 					</span>
 					<Link
 						href={`/properties/${listing._id}`}

@@ -22,6 +22,62 @@ export type SanityImageAssetReference = {
   [internalGroqTypeReferenceTo]?: "sanity.imageAsset";
 };
 
+export type UserListing = {
+  _id: string;
+  _type: "userListing";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  userId?: string;
+  status?: "pending" | "active" | "rejected";
+  plan?: string;
+  tag?: "For Sale" | "For Rent";
+  price?: number;
+  title?: string;
+  description?: string;
+  location?: string;
+  beds?: number;
+  baths?: number;
+  sqft?: string;
+  type?:
+    | "Apartment"
+    | "Townhouse"
+    | "Detached"
+    | "Semi-Detached"
+    | "Flat"
+    | "Manor"
+    | "Terraced"
+    | "Penthouse";
+  amenities?: Array<string>;
+  contactEmail?: string;
+  contactPhone?: string;
+  images?: Array<{
+    asset?: SanityImageAssetReference;
+    media?: unknown;
+    hotspot?: SanityImageHotspot;
+    crop?: SanityImageCrop;
+    alt?: string;
+    _type: "image";
+    _key: string;
+  }>;
+};
+
+export type SanityImageCrop = {
+  _type: "sanity.imageCrop";
+  top?: number;
+  bottom?: number;
+  left?: number;
+  right?: number;
+};
+
+export type SanityImageHotspot = {
+  _type: "sanity.imageHotspot";
+  x?: number;
+  y?: number;
+  height?: number;
+  width?: number;
+};
+
 export type Property = {
   _id: string;
   _type: "property";
@@ -56,22 +112,6 @@ export type Property = {
     _type: "image";
     _key: string;
   }>;
-};
-
-export type SanityImageCrop = {
-  _type: "sanity.imageCrop";
-  top?: number;
-  bottom?: number;
-  left?: number;
-  right?: number;
-};
-
-export type SanityImageHotspot = {
-  _type: "sanity.imageHotspot";
-  x?: number;
-  y?: number;
-  height?: number;
-  width?: number;
 };
 
 export type SanityImagePaletteSwatch = {
@@ -179,9 +219,10 @@ export type Slug = {
 
 export type AllSanitySchemaTypes =
   | SanityImageAssetReference
-  | Property
+  | UserListing
   | SanityImageCrop
   | SanityImageHotspot
+  | Property
   | SanityImagePaletteSwatch
   | SanityImagePalette
   | SanityImageDimensions
@@ -193,72 +234,73 @@ export type AllSanitySchemaTypes =
   | Slug;
 
 // Source: src/sanity/lib/property/getAllProperties.ts
-// Variable: ALL_PROPERTIES_QUERY
-// Query: *[_type == "property"] | order(_createdAt desc) {			_id,			tag,			price,			title,			location,			beds,			baths,			sqft,			type,			featured,			images[]{				asset->{					url				},				alt			}		}
-export type ALL_PROPERTIES_QUERY_RESULT = Array<{
-  _id: string;
-  tag: "For Rent" | "For Sale" | null;
-  price: number | null;
-  title: string | null;
-  location: string | null;
-  beds: number | null;
-  baths: number | null;
-  sqft: string | null;
-  type:
-    | "Apartment"
-    | "Detached"
-    | "Flat"
-    | "Manor"
-    | "Penthouse"
-    | "Semi-Detached"
-    | "Terraced"
-    | "Townhouse"
-    | null;
-  featured: boolean | null;
-  images: Array<{
-    asset: {
-      url: string | null;
-    } | null;
-    alt: string | null;
-  }> | null;
-}>;
-
-// Source: src/sanity/lib/property/getPropertyById.ts
-// Variable: PROPERTY_BY_ID_QUERY
-// Query: *[_type == "property" && _id == $id][0] {			_id,			tag,			price,			title,			location,			beds,			baths,			sqft,			type,			featured,			images[]{				asset->{					url				},				alt			}		}
-export type PROPERTY_BY_ID_QUERY_RESULT = {
-  _id: string;
-  tag: "For Rent" | "For Sale" | null;
-  price: number | null;
-  title: string | null;
-  location: string | null;
-  beds: number | null;
-  baths: number | null;
-  sqft: string | null;
-  type:
-    | "Apartment"
-    | "Detached"
-    | "Flat"
-    | "Manor"
-    | "Penthouse"
-    | "Semi-Detached"
-    | "Terraced"
-    | "Townhouse"
-    | null;
-  featured: boolean | null;
-  images: Array<{
-    asset: {
-      url: string | null;
-    } | null;
-    alt: string | null;
-  }> | null;
-} | null;
+// Variable: QUERY
+// Query: *[			(_type == "property") ||			(_type == "userListing" && status == "active")		] | order(_createdAt desc) {				_id,	_type,	tag,	price,	title,	location,	beds,	baths,	sqft,	type,	featured,	images[]{		_key,		asset->{			url		},		alt	}		}
+export type QUERY_RESULT = Array<
+  | {
+      _id: string;
+      _type: "property";
+      tag: "For Rent" | "For Sale" | null;
+      price: number | null;
+      title: string | null;
+      location: string | null;
+      beds: number | null;
+      baths: number | null;
+      sqft: string | null;
+      type:
+        | "Apartment"
+        | "Detached"
+        | "Flat"
+        | "Manor"
+        | "Penthouse"
+        | "Semi-Detached"
+        | "Terraced"
+        | "Townhouse"
+        | null;
+      featured: boolean | null;
+      images: Array<{
+        _key: string;
+        asset: {
+          url: string | null;
+        } | null;
+        alt: string | null;
+      }> | null;
+    }
+  | {
+      _id: string;
+      _type: "userListing";
+      tag: "For Rent" | "For Sale" | null;
+      price: number | null;
+      title: string | null;
+      location: string | null;
+      beds: number | null;
+      baths: number | null;
+      sqft: string | null;
+      type:
+        | "Apartment"
+        | "Detached"
+        | "Flat"
+        | "Manor"
+        | "Penthouse"
+        | "Semi-Detached"
+        | "Terraced"
+        | "Townhouse"
+        | null;
+      featured: null;
+      images: Array<{
+        _key: string;
+        asset: {
+          url: string | null;
+        } | null;
+        alt: string | null;
+      }> | null;
+    }
+>;
 
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n\t\t*[_type == "property"] | order(_createdAt desc) {\n\t\t\t_id,\n\t\t\ttag,\n\t\t\tprice,\n\t\t\ttitle,\n\t\t\tlocation,\n\t\t\tbeds,\n\t\t\tbaths,\n\t\t\tsqft,\n\t\t\ttype,\n\t\t\tfeatured,\n\t\t\timages[]{\n\t\t\t\tasset->{\n\t\t\t\t\turl\n\t\t\t\t},\n\t\t\t\talt\n\t\t\t}\n\t\t}\n\t': ALL_PROPERTIES_QUERY_RESULT;
-    '\n\t\t*[_type == "property" && _id == $id][0] {\n\t\t\t_id,\n\t\t\ttag,\n\t\t\tprice,\n\t\t\ttitle,\n\t\t\tlocation,\n\t\t\tbeds,\n\t\t\tbaths,\n\t\t\tsqft,\n\t\t\ttype,\n\t\t\tfeatured,\n\t\t\timages[]{\n\t\t\t\tasset->{\n\t\t\t\t\turl\n\t\t\t\t},\n\t\t\t\talt\n\t\t\t}\n\t\t}\n\t': PROPERTY_BY_ID_QUERY_RESULT;
+    '\n\t\t*[\n\t\t\t(_type == "property") ||\n\t\t\t(_type == "userListing" && status == "active")\n\t\t] | order(_createdAt desc) {\n\t\t\t\n\t_id,\n\t_type,\n\ttag,\n\tprice,\n\ttitle,\n\tlocation,\n\tbeds,\n\tbaths,\n\tsqft,\n\ttype,\n\tfeatured,\n\timages[]{\n\t\t_key,\n\t\tasset->{\n\t\t\turl\n\t\t},\n\t\talt\n\t}\n\n\t\t}\n\t': QUERY_RESULT;
   }
 }

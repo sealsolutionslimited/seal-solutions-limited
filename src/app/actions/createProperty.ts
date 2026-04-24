@@ -34,11 +34,14 @@ export async function createProperty(formData: FormData) {
 					asset: { _type: "reference" as const, _ref: asset._id },
 					alt: formData.get("title") as string,
 				};
-			})
+			}),
 	);
 
-	const property = await writeClient.create({
-		_type: "property",
+	const listing = await writeClient.create({
+		_type: "userListing",
+		userId,
+		status: "pending",
+		plan: (formData.get("plan") as string) || "basic",
 		tag: formData.get("tag") as "For Sale" | "For Rent",
 		type: formData.get("type") as string,
 		beds: Number(formData.get("beds")),
@@ -49,10 +52,12 @@ export async function createProperty(formData: FormData) {
 		description: formData.get("description") as string,
 		price: Number(formData.get("price")),
 		amenities: JSON.parse((formData.get("amenities") as string) || "[]"),
+		contactEmail: formData.get("contactEmail") as string,
+		contactPhone: formData.get("contactPhone") as string,
 		images: imageAssets,
-		featured: false,
 	});
 
 	revalidatePath("/properties");
-	return { success: true, id: property._id };
+	revalidatePath("/my-listings");
+	return { success: true, id: listing._id };
 }
