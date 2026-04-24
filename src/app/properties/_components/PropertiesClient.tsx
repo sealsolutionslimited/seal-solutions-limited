@@ -51,7 +51,7 @@ export default function PropertiesClient({
 	const filtered = sorted.filter((p) => {
 		if (activeCategory !== "All" && p.tag !== activeCategory) return false;
 		if (activeType !== "All Types" && p.type !== activeType) return false;
-		if (!priceMatchesRange(p.price, activePriceRange)) return false;
+		if (!priceMatchesRange(p.price ?? undefined, activePriceRange)) return false;
 		if (activeBeds !== "Any Beds") {
 			const minBeds = parseInt(activeBeds);
 			if ((p.beds ?? 0) < minBeds) return false;
