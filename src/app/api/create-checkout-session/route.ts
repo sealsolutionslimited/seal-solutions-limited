@@ -4,21 +4,24 @@ import { auth } from "@clerk/nextjs/server";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!);
 
-const PLANS: Record<string, { name: string; amount: number; currency: string }> = {
+const PLANS: Record<string, { name: string; amount: number; currency: string; listingsAllowed: number }> = {
 	starter: {
-		name: "Starter Property Listing — 30 days",
+		name: "Starter — 5 Property Listings",
 		amount: 4900, // £49.00 in pence
 		currency: "gbp",
+		listingsAllowed: 5,
 	},
 	standard: {
-		name: "Standard Property Listing — 90 days",
+		name: "Standard — 15 Property Listings",
 		amount: 9900, // £99.00
 		currency: "gbp",
+		listingsAllowed: 15,
 	},
 	premium: {
-		name: "Premium Property Listing — 6 months",
+		name: "Premium — 40 Property Listings",
 		amount: 19900, // £199.00
 		currency: "gbp",
+		listingsAllowed: 40,
 	},
 };
 
@@ -54,7 +57,7 @@ export async function POST(req: NextRequest) {
 		mode: "payment",
 		success_url: `${appUrl}/list-property/submit?session_id={CHECKOUT_SESSION_ID}&plan=${plan}`,
 		cancel_url: `${appUrl}/list-property`,
-		metadata: { userId, plan },
+		metadata: { userId, plan, listingsAllowed: String(selectedPlan.listingsAllowed) },
 	});
 
 	return NextResponse.json({ url: session.url });

@@ -39,6 +39,14 @@ const userListingType = defineType({
 		}),
 
 		defineField({
+			name: "paymentRecordId",
+			title: "Payment Record ID",
+			type: "string",
+			readOnly: true,
+			description: "References the paymentRecord document this listing was charged against",
+		}),
+
+		defineField({
 			name: "tag",
 			title: "Listing Type",
 			type: "string",

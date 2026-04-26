@@ -1,7 +1,8 @@
 import { type SchemaTypeDefinition } from "sanity";
 import propertyType from "./property";
 import userListingType from "./userListingType";
+import paymentRecordType from "./paymentRecord";
 
 export const schema: { types: SchemaTypeDefinition[] } = {
-	types: [propertyType, userListingType],
+	types: [propertyType, userListingType, paymentRecordType],
 };
