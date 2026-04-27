@@ -50,36 +50,37 @@ export default function MyListingsClient({
 	return (
 		<div
 			className="min-h-screen flex flex-col"
-			style={{ backgroundColor: "#f8f7f4", fontFamily: "'DM Sans', sans-serif" }}
+			style={{
+				backgroundColor: "#f8f7f4",
+				fontFamily: "'DM Sans', sans-serif",
+			}}
 		>
 			<NavbarStatic />
 
 			{/* Header */}
 			<div
-				className="relative overflow-hidden"
+				className="relative overflow-hidden bg-cover bg-center"
 				style={{
-					background: "linear-gradient(135deg, #0b1535 0%, #162050 45%, #1e3070 100%)",
+					backgroundImage: "url('/bg-pic.png')",
 					paddingTop: "72px",
 				}}
 			>
-				<div className="absolute inset-0 opacity-[0.07] pointer-events-none">
-					<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-						<defs>
-							<pattern id="grid" width="60" height="60" patternUnits="userSpaceOnUse">
-								<path d="M 60 0 L 0 0 0 60" fill="none" stroke="white" strokeWidth="0.5" />
-							</pattern>
-						</defs>
-						<rect width="100%" height="100%" fill="url(#grid)" />
-					</svg>
-				</div>
+				<div className="absolute inset-0 bg-[#0b1535]/75" />
 				<div
 					className="absolute bottom-0 left-0 right-0 h-px"
-					style={{ background: "linear-gradient(90deg, transparent, #c9a84c, transparent)" }}
+					style={{
+						background:
+							"linear-gradient(90deg, transparent, #c9a84c, transparent)",
+					}}
 				/>
-
-				<div className="relative max-w-7xl mx-auto px-4 md:px-6 pt-10 pb-10">
+				<div className="relative max-w-7xl mx-auto px-4 md:px-6 py-20 md:py-32">
 					<div className="flex items-center gap-1.5 text-xs text-white/40 mb-3">
-						<Link href="/" className="hover:text-white/70 transition-colors">Home</Link>
+						<Link
+							href="/"
+							className="hover:text-white/70 transition-colors"
+						>
+							Home
+						</Link>
 						<span>/</span>
 						<span className="text-white/60">My Listings</span>
 					</div>
@@ -87,13 +88,23 @@ export default function MyListingsClient({
 						<div>
 							<h1
 								className="text-white text-3xl md:text-4xl font-bold mb-1"
-								style={{ fontFamily: "'Playfair Display', serif" }}
+								style={{
+									fontFamily: "'Playfair Display', serif",
+								}}
 							>
 								My{" "}
-								<span style={{ color: "#e8c76a", fontStyle: "italic" }}>Listings</span>
+								<span
+									style={{
+										color: "#e8c76a",
+										fontStyle: "italic",
+									}}
+								>
+									Listings
+								</span>
 							</h1>
 							<p className="text-white/50 text-sm">
-								{listings.length} listing{listings.length !== 1 ? "s" : ""} submitted
+								{listings.length} listing
+								{listings.length !== 1 ? "s" : ""} submitted
 							</p>
 						</div>
 						<Link
@@ -108,13 +119,16 @@ export default function MyListingsClient({
 			</div>
 
 			{/* Body */}
-			<div className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-6 py-8">
+			<div className="flex-1 max-w-7xl mx-auto w-full px-4 md:px-6 py-4 md:py-8">
 				{listings.length === 0 ? (
 					<div className="flex flex-col items-center justify-center py-24 text-center">
 						<Home size={48} className="text-gray-300 mb-4" />
-						<p className="text-gray-500 text-lg font-medium">No listings yet</p>
+						<p className="text-gray-500 text-lg font-medium">
+							No listings yet
+						</p>
 						<p className="text-gray-400 text-sm mt-1 mb-6">
-							Submit your first property and we&apos;ll review it within 24 hours.
+							Submit your first property and we&apos;ll review it
+							within 24 hours.
 						</p>
 						<Link
 							href="/list-property"
@@ -140,7 +154,9 @@ export default function MyListingsClient({
 
 function ListingRow({ listing }: { listing: PropertyListing }) {
 	const status = listing.status ?? "pending";
-	const cfg = statusConfig[status as keyof typeof statusConfig] ?? statusConfig.pending;
+	const cfg =
+		statusConfig[status as keyof typeof statusConfig] ??
+		statusConfig.pending;
 	const StatusIcon = cfg.icon;
 
 	return (
@@ -165,7 +181,9 @@ function ListingRow({ listing }: { listing: PropertyListing }) {
 				)}
 				{listing.tag && (
 					<div className="absolute top-3 left-3">
-						<span className={`text-xs font-bold px-2.5 py-0.5 rounded-full tracking-wide ${tagColors[listing.tag]}`}>
+						<span
+							className={`text-xs font-bold px-2.5 py-0.5 rounded-full tracking-wide ${tagColors[listing.tag]}`}
+						>
 							{listing.tag}
 						</span>
 					</div>
@@ -180,10 +198,12 @@ function ListingRow({ listing }: { listing: PropertyListing }) {
 							{listing.title}
 						</h3>
 						{/* Status badge */}
-						<span className={cn(
-							"flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border shrink-0",
-							cfg.className,
-						)}>
+						<span
+							className={cn(
+								"flex items-center gap-1.5 text-xs font-semibold px-3 py-1 rounded-full border shrink-0",
+								cfg.className,
+							)}
+						>
 							<StatusIcon size={12} className={cfg.iconClass} />
 							{cfg.label}
 						</span>
@@ -231,12 +251,14 @@ function ListingRow({ listing }: { listing: PropertyListing }) {
 
 				{status === "pending" && (
 					<p className="text-xs text-amber-600 bg-amber-50 rounded-lg px-3 py-2 border border-amber-100">
-						Your listing is under review. We typically approve listings within 24 hours.
+						Your listing is under review. We typically approve
+						listings within 24 hours.
 					</p>
 				)}
 				{status === "rejected" && (
 					<p className="text-xs text-red-600 bg-red-50 rounded-lg px-3 py-2 border border-red-100">
-						This listing was not approved. Please contact support for more information.
+						This listing was not approved. Please contact support
+						for more information.
 					</p>
 				)}
 			</div>

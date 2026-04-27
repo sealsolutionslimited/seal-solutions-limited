@@ -10,7 +10,7 @@ const navLinks = [
 	{ label: "Buy", href: "/properties" },
 	{ label: "Rent", href: "/properties" },
 	{ label: "Sell", href: "/#services" },
-	{ label: "Manage", href: "/#services" },
+	{ label: "Cleaning", href: "/cleaning" },
 	{ label: "About", href: "/#how-it-works" },
 ];
 
@@ -57,6 +57,13 @@ export default function NavbarStatic() {
 						</UserButton>
 					</Show>
 
+					<Link
+						href="/cleaning"
+						className="bg-[#0b1535] hover:bg-[#162050] text-white text-sm font-bold tracking-wide px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0"
+					>
+						Book a Clean
+					</Link>
+
 					<Show when="signed-out">
 						<SignInButton mode="modal">
 							<button className="bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold tracking-wide px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0">
@@ -98,10 +105,20 @@ export default function NavbarStatic() {
 
 					<Show when="signed-out">
 						<SignInButton mode="modal">
-							<button className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg transition-all duration-200 shadow-sm">
-								List Property
+							<button className="w-full bg-[#0b1535] hover:bg-[#162050] text-white text-sm font-bold py-3 rounded-lg transition-all duration-200 shadow-sm">
+								Book a Clean
 							</button>
 						</SignInButton>
+					</Show>
+
+					<Show when="signed-in">
+						<Link
+							href="/cleaning"
+							className="w-full bg-[#0b1535] hover:bg-[#162050] text-white text-sm font-bold py-3 rounded-lg text-center block transition-all duration-200 shadow-sm"
+							onClick={() => setOpen(false)}
+						>
+							Book a Clean
+						</Link>
 					</Show>
 
 					<Show when="signed-in">

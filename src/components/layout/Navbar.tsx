@@ -11,7 +11,7 @@ const navLinks = [
 	{ label: "Buy", href: "#listings" },
 	{ label: "Rent", href: "#listings" },
 	{ label: "Sell", href: "#services" },
-	{ label: "Manage", href: "#services" },
+	{ label: "Cleaning", href: "/cleaning" },
 	{ label: "About", href: "#how-it-works" },
 ];
 
@@ -90,6 +90,17 @@ export default function Navbar() {
 									</UserButton.MenuItems>
 								</UserButton>
 							</Show>
+
+							<Link
+								href="/cleaning"
+								className={`text-sm font-bold tracking-wide px-5 py-2.5 rounded-lg transition-all duration-200 shadow-md hover:shadow-lg hover:-translate-y-0.5 active:translate-y-0 ${
+									scrolled
+										? "bg-[#0b1535] hover:bg-[#162050] text-white"
+										: "bg-white/15 hover:bg-white/25 text-white border border-white/30"
+								}`}
+							>
+								Book a Clean
+							</Link>
 
 							<Show when="signed-out">
 								<SignInButton mode="modal">

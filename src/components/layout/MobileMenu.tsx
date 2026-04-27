@@ -16,7 +16,7 @@ const navLinks = [
 	{ label: "Buy", href: "#listings" },
 	{ label: "Rent", href: "#listings" },
 	{ label: "Sell", href: "#services" },
-	{ label: "Manage", href: "#services" },
+	{ label: "Cleaning", href: "/cleaning" },
 	{ label: "About", href: "#how-it-works" },
 ];
 
@@ -64,61 +64,69 @@ export default function MobileMenu() {
 							{link.label}
 						</Link>
 					))}
-
-					<Show when="signed-in">
-						<Link
-							href="/my-listings"
-							className="flex items-center gap-2.5 text-gray-700 text-sm font-medium px-3 py-3 rounded-lg hover:bg-amber-50 hover:text-amber-600 transition-colors duration-200 tracking-wide"
-						>
-							<LayoutList size={15} />
-							My Listings
-						</Link>
-					</Show>
 				</nav>
 
 				<div className="mx-6 border-t border-gray-100" />
 
 				<div className="px-6 py-6 flex flex-col gap-3">
+					{/* Signed-in state */}
 					<Show when="signed-in">
-						<div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-50">
-							<UserButton>
-								<UserButton.MenuItems>
-									<UserButton.Link
-										label="My Listings"
-										labelIcon={<LayoutList size={16} />}
-										href="/my-listings"
-									/>
-								</UserButton.MenuItems>
-							</UserButton>
-							<span className="text-sm text-gray-600 font-medium">
-								My Account
-							</span>
+						<div className="flex flex-col gap-3">
+							<div className="flex items-center gap-3 px-3 py-2 rounded-lg bg-gray-50">
+								<UserButton>
+									<UserButton.MenuItems>
+										<UserButton.Link
+											label="My Listings"
+											labelIcon={<LayoutList size={16} />}
+											href="/my-listings"
+										/>
+									</UserButton.MenuItems>
+								</UserButton>
+								<span className="text-sm text-gray-600 font-medium">
+									My Account
+								</span>
+							</div>
+							<Link
+								href="/my-listings"
+								className="flex items-center gap-2.5 text-gray-700 text-sm font-semibold px-3 py-3 rounded-lg hover:bg-amber-50 hover:text-amber-600 transition-colors duration-200"
+							>
+								<LayoutList size={15} />
+								My Listings
+							</Link>
+							<Link
+								href="/list-property"
+								className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg text-center block transition-all duration-200 shadow-sm hover:shadow-md"
+							>
+								List Property
+							</Link>
+							<Link
+								href="/cleaning"
+								className="w-full bg-[#0b1535] hover:bg-[#162050] text-white text-sm font-bold py-3 rounded-lg text-center block transition-all duration-200 shadow-sm hover:shadow-md"
+							>
+								Book a Clean
+							</Link>
 						</div>
 					</Show>
 
+					{/* Signed-out state */}
 					<Show when="signed-out">
-						<SignInButton mode="modal">
-							<button className="w-full text-sm font-semibold text-[#162050] border border-[#162050]/20 py-3 rounded-lg hover:bg-[#162050]/5 transition-colors">
-								Sign In
-							</button>
-						</SignInButton>
-					</Show>
-
-					<Show when="signed-out">
-						<SignInButton mode="modal">
-							<button className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
-								List Property
-							</button>
-						</SignInButton>
-					</Show>
-
-					<Show when="signed-in">
-						<Link
-							href="/list-property"
-							className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg text-center block transition-all duration-200 shadow-sm hover:shadow-md"
-						>
-							List Property
-						</Link>
+						<div className="flex flex-col gap-3">
+							<SignInButton mode="modal">
+								<button className="w-full text-sm font-semibold text-[#162050] border border-[#162050]/20 py-3 rounded-lg hover:bg-[#162050]/5 transition-colors">
+									Sign In
+								</button>
+							</SignInButton>
+							<SignInButton mode="modal">
+								<button className="w-full bg-[#0b1535] hover:bg-[#162050] text-white text-sm font-bold py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+									Book a Clean
+								</button>
+							</SignInButton>
+							<SignInButton mode="modal">
+								<button className="w-full bg-amber-400 hover:bg-amber-500 text-[#0b1535] text-sm font-bold py-3 rounded-lg transition-all duration-200 shadow-sm hover:shadow-md">
+									List Property
+								</button>
+							</SignInButton>
+						</div>
 					</Show>
 				</div>
 			</SheetContent>

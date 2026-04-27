@@ -22,15 +22,15 @@ const FIELDS = `
 	}
 `;
 
-export const getAllProperties = async () => {
-	const QUERY = groq`
-		*[
-			(_type == "property") ||
-			(_type == "userListing" && status == "active")
-		] | order(_createdAt desc) {
-			${FIELDS}
-		}
-	`;
+const ALL_PROPERTIES_QUERY = groq`
+	*[
+		(_type == "property") ||
+		(_type == "userListing" && status == "active")
+	] | order(_createdAt desc) {
+		${FIELDS}
+	}
+`;
 
-	return client.fetch(QUERY, {}, { next: { revalidate: 10 } });
+export const getAllProperties = async () => {
+	return client.fetch(ALL_PROPERTIES_QUERY, {}, { next: { revalidate: 10 } });
 };

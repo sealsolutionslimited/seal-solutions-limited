@@ -12,6 +12,7 @@ import {
 	Clock,
 	Camera,
 } from "lucide-react";
+import Link from "next/link";
 
 const plans = [
 	{
@@ -85,7 +86,7 @@ export default function PricingPlans() {
 
 			const data = await res.json();
 			if (data.url) {
-				window.location.href = data.url;
+				window.location.assign(data.url);
 			} else {
 				setLoading(null);
 			}
@@ -97,17 +98,25 @@ export default function PricingPlans() {
 	return (
 		<main className="min-h-screen bg-gray-50 pt-20">
 			{/* Hero */}
-			<section className="bg-[#0b1535] py-20 px-6 text-center">
-				<span className="inline-block bg-amber-400/10 text-amber-400 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
-					List Your Property
-				</span>
-				<h1 className="text-4xl md:text-5xl font-bold text-white mb-4 max-w-2xl mx-auto leading-tight">
-					Reach thousands of serious buyers and renters
-				</h1>
-				<p className="text-gray-300 text-lg max-w-xl mx-auto">
-					Choose a plan that fits your needs and get your property in front of
-					the right audience — fast.
-				</p>
+			<section
+				className="relative py-20 px-6 text-center bg-cover bg-center"
+				style={{ backgroundImage: "url('/bg-pic.png')" }}
+			>
+				{/* Dark overlay */}
+				<div className="absolute inset-0 bg-[#0b1535]/75" />
+
+				<div className="relative z-10">
+					<span className="inline-block bg-amber-400/10 text-amber-400 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-5">
+						List Your Property
+					</span>
+					<h1 className="text-4xl md:text-5xl font-bold text-white mb-4 max-w-2xl mx-auto leading-tight">
+						Reach thousands of serious buyers and renters
+					</h1>
+					<p className="text-gray-300 text-lg max-w-xl mx-auto">
+						Choose a plan that fits your needs and get your property
+						in front of the right audience fast.
+					</p>
+				</div>
 			</section>
 
 			{/* Trust bar */}
@@ -119,7 +128,9 @@ export default function PricingPlans() {
 								<Icon size={16} className="text-amber-500" />
 							</div>
 							<div>
-								<p className="text-xs font-semibold text-[#0b1535]">{label}</p>
+								<p className="text-xs font-semibold text-[#0b1535]">
+									{label}
+								</p>
 								<p className="text-xs text-gray-400">{sub}</p>
 							</div>
 						</div>
@@ -152,13 +163,17 @@ export default function PricingPlans() {
 								<div className="flex items-center gap-3">
 									<div
 										className={`p-2.5 rounded-xl ${
-											plan.highlight ? "bg-amber-50" : "bg-gray-50"
+											plan.highlight
+												? "bg-amber-50"
+												: "bg-gray-50"
 										}`}
 									>
 										<Icon
 											size={18}
 											className={
-												plan.highlight ? "text-amber-500" : "text-[#0b1535]"
+												plan.highlight
+													? "text-amber-500"
+													: "text-[#0b1535]"
 											}
 										/>
 									</div>
@@ -171,7 +186,9 @@ export default function PricingPlans() {
 									<div className="text-3xl font-extrabold text-[#0b1535]">
 										{plan.price}
 									</div>
-									<p className="text-sm text-gray-400 mt-1">{plan.duration}</p>
+									<p className="text-sm text-gray-400 mt-1">
+										{plan.duration}
+									</p>
 								</div>
 
 								<ul className="flex flex-col gap-3 flex-1">
@@ -191,7 +208,9 @@ export default function PricingPlans() {
 
 								{isSignedIn ? (
 									<button
-										onClick={() => handleSelectPlan(plan.id)}
+										onClick={() =>
+											handleSelectPlan(plan.id)
+										}
 										disabled={!!loading}
 										className={`w-full py-3 rounded-xl text-sm font-bold tracking-wide transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed ${
 											plan.highlight
@@ -228,10 +247,14 @@ export default function PricingPlans() {
 				</div>
 
 				<p className="text-center text-sm text-gray-400 mt-10">
-					All plans include a review by our team before going live. Questions?{" "}
-					<a href="/#contact" className="text-amber-600 hover:underline font-medium">
+					All plans include a review by our team before going live.
+					Questions?{" "}
+					<Link
+						href="/#contact"
+						className="text-amber-600 hover:underline font-medium"
+					>
 						Contact us
-					</a>
+					</Link>
 				</p>
 			</section>
 		</main>

@@ -15,6 +15,52 @@
 export declare const internalGroqTypeReferenceTo: unique symbol;
 
 // Source: schema.json
+export type CleaningBooking = {
+  _id: string;
+  _type: "cleaningBooking";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  stripeSessionId?: string;
+  userId?: string;
+  status?: "confirmed" | "completed" | "cancelled";
+  serviceType?:
+    | "regularClean"
+    | "deepClean"
+    | "endOfTenancy"
+    | "carpetClean"
+    | "ovenClean";
+  bedrooms?: number;
+  bathrooms?: number;
+  extras?: Array<string>;
+  address?: string;
+  postcode?: string;
+  date?: string;
+  timeSlot?: string;
+  customerName?: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  notes?: string;
+  totalAmount?: number;
+  bookedAt?: string;
+};
+
+export type PaymentRecord = {
+  _id: string;
+  _type: "paymentRecord";
+  _createdAt: string;
+  _updatedAt: string;
+  _rev: string;
+  userId?: string;
+  stripeSessionId?: string;
+  plan?: "starter" | "standard" | "premium";
+  listingsAllowed?: number;
+  listingsUsed?: number;
+  status?: "active" | "exhausted";
+  amountPaid?: number;
+  paidAt?: string;
+};
+
 export type SanityImageAssetReference = {
   _ref: string;
   _type: "reference";
@@ -31,6 +77,7 @@ export type UserListing = {
   userId?: string;
   status?: "pending" | "active" | "rejected";
   plan?: string;
+  paymentRecordId?: string;
   tag?: "For Sale" | "For Rent";
   price?: number;
   title?: string;
@@ -218,6 +265,8 @@ export type Slug = {
 };
 
 export type AllSanitySchemaTypes =
+  | CleaningBooking
+  | PaymentRecord
   | SanityImageAssetReference
   | UserListing
   | SanityImageCrop
@@ -234,9 +283,9 @@ export type AllSanitySchemaTypes =
   | Slug;
 
 // Source: src/sanity/lib/property/getAllProperties.ts
-// Variable: QUERY
-// Query: *[			(_type == "property") ||			(_type == "userListing" && status == "active")		] | order(_createdAt desc) {				_id,	_type,	tag,	price,	title,	location,	beds,	baths,	sqft,	type,	featured,	images[]{		_key,		asset->{			url		},		alt	}		}
-export type QUERY_RESULT = Array<
+// Variable: ALL_PROPERTIES_QUERY
+// Query: *[		(_type == "property") ||		(_type == "userListing" && status == "active")	] | order(_createdAt desc) {			_id,	_type,	tag,	price,	title,	location,	beds,	baths,	sqft,	type,	featured,	images[]{		_key,		asset->{			url		},		alt	}	}
+export type ALL_PROPERTIES_QUERY_RESULT = Array<
   | {
       _id: string;
       _type: "property";
@@ -297,10 +346,124 @@ export type QUERY_RESULT = Array<
     }
 >;
 
+// Source: src/sanity/lib/property/getPropertyById.ts
+// Variable: PROPERTY_BY_ID_QUERY
+// Query: *[		(_type == "property" || _type == "userListing") &&		_id == $id	][0] {		_id,		_type,		tag,		price,		title,		location,		beds,		baths,		sqft,		type,		featured,		description,		amenities,		status,		userId,		contactEmail,		contactPhone,		plan,		images[]{			_key,			asset->{				url			},			alt		}	}
+export type PROPERTY_BY_ID_QUERY_RESULT =
+  | {
+      _id: string;
+      _type: "property";
+      tag: "For Rent" | "For Sale" | null;
+      price: number | null;
+      title: string | null;
+      location: string | null;
+      beds: number | null;
+      baths: number | null;
+      sqft: string | null;
+      type:
+        | "Apartment"
+        | "Detached"
+        | "Flat"
+        | "Manor"
+        | "Penthouse"
+        | "Semi-Detached"
+        | "Terraced"
+        | "Townhouse"
+        | null;
+      featured: boolean | null;
+      description: string | null;
+      amenities: Array<string> | null;
+      status: null;
+      userId: null;
+      contactEmail: null;
+      contactPhone: null;
+      plan: null;
+      images: Array<{
+        _key: string;
+        asset: {
+          url: string | null;
+        } | null;
+        alt: string | null;
+      }> | null;
+    }
+  | {
+      _id: string;
+      _type: "userListing";
+      tag: "For Rent" | "For Sale" | null;
+      price: number | null;
+      title: string | null;
+      location: string | null;
+      beds: number | null;
+      baths: number | null;
+      sqft: string | null;
+      type:
+        | "Apartment"
+        | "Detached"
+        | "Flat"
+        | "Manor"
+        | "Penthouse"
+        | "Semi-Detached"
+        | "Terraced"
+        | "Townhouse"
+        | null;
+      featured: null;
+      description: string | null;
+      amenities: Array<string> | null;
+      status: "active" | "pending" | "rejected" | null;
+      userId: string | null;
+      contactEmail: string | null;
+      contactPhone: string | null;
+      plan: string | null;
+      images: Array<{
+        _key: string;
+        asset: {
+          url: string | null;
+        } | null;
+        alt: string | null;
+      }> | null;
+    }
+  | null;
+
+// Source: src/sanity/lib/property/getUserListings.ts
+// Variable: USER_LISTINGS_QUERY
+// Query: *[_type == "userListing" && userId == $userId] | order(_createdAt desc) {		_id,		_type,		tag,		price,		title,		location,		beds,		baths,		sqft,		type,		status,		plan,		images[]{			_key,			asset->{				url			},			alt		}	}
+export type USER_LISTINGS_QUERY_RESULT = Array<{
+  _id: string;
+  _type: "userListing";
+  tag: "For Rent" | "For Sale" | null;
+  price: number | null;
+  title: string | null;
+  location: string | null;
+  beds: number | null;
+  baths: number | null;
+  sqft: string | null;
+  type:
+    | "Apartment"
+    | "Detached"
+    | "Flat"
+    | "Manor"
+    | "Penthouse"
+    | "Semi-Detached"
+    | "Terraced"
+    | "Townhouse"
+    | null;
+  status: "active" | "pending" | "rejected" | null;
+  plan: string | null;
+  images: Array<{
+    _key: string;
+    asset: {
+      url: string | null;
+    } | null;
+    alt: string | null;
+  }> | null;
+}>;
+
 // Query TypeMap
 import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
-    '\n\t\t*[\n\t\t\t(_type == "property") ||\n\t\t\t(_type == "userListing" && status == "active")\n\t\t] | order(_createdAt desc) {\n\t\t\t\n\t_id,\n\t_type,\n\ttag,\n\tprice,\n\ttitle,\n\tlocation,\n\tbeds,\n\tbaths,\n\tsqft,\n\ttype,\n\tfeatured,\n\timages[]{\n\t\t_key,\n\t\tasset->{\n\t\t\turl\n\t\t},\n\t\talt\n\t}\n\n\t\t}\n\t': QUERY_RESULT;
+    '\n\t*[\n\t\t(_type == "property") ||\n\t\t(_type == "userListing" && status == "active")\n\t] | order(_createdAt desc) {\n\t\t\n\t_id,\n\t_type,\n\ttag,\n\tprice,\n\ttitle,\n\tlocation,\n\tbeds,\n\tbaths,\n\tsqft,\n\ttype,\n\tfeatured,\n\timages[]{\n\t\t_key,\n\t\tasset->{\n\t\t\turl\n\t\t},\n\t\talt\n\t}\n\n\t}\n': ALL_PROPERTIES_QUERY_RESULT;
+    '\n\t*[\n\t\t(_type == "property" || _type == "userListing") &&\n\t\t_id == $id\n\t][0] {\n\t\t_id,\n\t\t_type,\n\t\ttag,\n\t\tprice,\n\t\ttitle,\n\t\tlocation,\n\t\tbeds,\n\t\tbaths,\n\t\tsqft,\n\t\ttype,\n\t\tfeatured,\n\t\tdescription,\n\t\tamenities,\n\t\tstatus,\n\t\tuserId,\n\t\tcontactEmail,\n\t\tcontactPhone,\n\t\tplan,\n\t\timages[]{\n\t\t\t_key,\n\t\t\tasset->{\n\t\t\t\turl\n\t\t\t},\n\t\t\talt\n\t\t}\n\t}\n': PROPERTY_BY_ID_QUERY_RESULT;
+    '\n\t*[_type == "userListing" && userId == $userId] | order(_createdAt desc) {\n\t\t_id,\n\t\t_type,\n\t\ttag,\n\t\tprice,\n\t\ttitle,\n\t\tlocation,\n\t\tbeds,\n\t\tbaths,\n\t\tsqft,\n\t\ttype,\n\t\tstatus,\n\t\tplan,\n\t\timages[]{\n\t\t\t_key,\n\t\t\tasset->{\n\t\t\t\turl\n\t\t\t},\n\t\t\talt\n\t\t}\n\t}\n': USER_LISTINGS_QUERY_RESULT;
   }
 }
