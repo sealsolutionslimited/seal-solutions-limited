@@ -108,7 +108,7 @@ export default async function SubmitPage({
 		const record = await getActiveRecord(userId);
 		remaining = record
 			? record.listingsAllowed - record.listingsUsed
-			: PLAN_LISTINGS[resolvedPlan] ?? 5;
+			: (PLAN_LISTINGS[resolvedPlan] ?? 5);
 	} else {
 		// No fresh payment — look for existing credits
 		const record = await getActiveRecord(userId);
@@ -123,20 +123,29 @@ export default async function SubmitPage({
 		<>
 			<NavbarStatic />
 			<main className="min-h-screen bg-gray-50 pt-20">
-				<section className="bg-[#0b1535] py-14 px-6 text-center">
-					<span className="inline-block bg-amber-400/10 text-amber-400 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
-						{PLAN_LABELS[resolvedPlan] ?? "Property Listing"}
-					</span>
-					<h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
-						Tell us about your property
-					</h1>
-					<p className="text-gray-300 text-base max-w-md mx-auto">
-						Fill in the details below. Your listing will be reviewed and go live
-						within 2 hours.
-					</p>
-					<p className="mt-3 text-amber-400 text-sm font-semibold">
-						{remaining} listing credit{remaining !== 1 ? "s" : ""} remaining
-					</p>
+				<section
+					className="relative bg-cover bg-center py-14 px-6 text-center"
+					style={{ backgroundImage: "url('/bg-pic.png')" }}
+				>
+					{/* Dark overlay */}
+					<div className="absolute inset-0 bg-[#0b1535]/75" />
+
+					<div className="relative z-10">
+						<span className="inline-block bg-amber-400/10 text-amber-400 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-4">
+							{PLAN_LABELS[resolvedPlan] ?? "Property Listing"}
+						</span>
+						<h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+							Tell us about your property
+						</h1>
+						<p className="text-gray-300 text-base max-w-md mx-auto">
+							Fill in the details below. Your listing will be
+							reviewed and go live within 2 hours.
+						</p>
+						<p className="mt-3 text-amber-400 text-sm font-semibold">
+							{remaining} listing credit
+							{remaining !== 1 ? "s" : ""} remaining
+						</p>
+					</div>
 				</section>
 
 				<section className="max-w-2xl mx-auto px-6 py-14">

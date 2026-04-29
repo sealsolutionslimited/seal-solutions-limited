@@ -101,7 +101,7 @@ export default function Hero() {
 	const handleSearch = () => {
 		const params = new URLSearchParams();
 		if (location) params.set("location", location);
-		params.set("category", activeTab === "rent" ? "To Let" : "For Sale");
+		params.set("category", activeTab === "rent" ? "For Rent" : "For Sale");
 		router.push(`/properties?${params.toString()}`);
 	};
 
@@ -264,26 +264,25 @@ export default function Hero() {
 							variants={fadeUp}
 							className="bg-white rounded-2xl shadow-2xl overflow-visible"
 						>
-							{/* Tabs */}
-							<div className="flex border-b border-gray-100 rounded-t-2xl overflow-hidden">
-								{(["buy", "rent"] as const).map((tab) => (
-									<button
-										key={tab}
-										onClick={() => setActiveTab(tab)}
-										className={cn(
-											"flex-1 py-4 text-sm font-semibold uppercase tracking-widest transition-all cursor-pointer",
-											activeTab === tab
-												? "bg-[#162050] text-white"
-												: "text-gray-500 hover:text-[#162050] hover:bg-gray-50",
-										)}
-									>
-										{tab}
-									</button>
-								))}
-							</div>
-
 							{/* Inputs */}
 							<div className="p-4 flex flex-col gap-3">
+								{/* Buy / Rent toggle */}
+								<div className="flex bg-gray-100 rounded-full p-1 self-start">
+									{(["buy", "rent"] as const).map((tab) => (
+										<button
+											key={tab}
+											onClick={() => setActiveTab(tab)}
+											className={cn(
+												"px-5 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-full transition-all cursor-pointer",
+												activeTab === tab
+													? "bg-[#162050] text-white shadow-sm"
+													: "text-gray-500 hover:text-gray-700",
+											)}
+										>
+											{tab}
+										</button>
+									))}
+								</div>
 								{/* Location autocomplete */}
 								<Popover
 									open={open && suggestions.length > 0}

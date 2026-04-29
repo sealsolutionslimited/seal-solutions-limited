@@ -1,4 +1,4 @@
-import { Home, Key, BarChart3, Shield, Wrench, FileText } from "lucide-react";
+import { Home, Key, BarChart3, Shield, Wrench } from "lucide-react";
 
 const services = [
 	{
@@ -31,12 +31,6 @@ const services = [
 		description:
 			"Routine inspections, maintenance scheduling, repairs, and contractor management to keep your property in peak condition.",
 	},
-	{
-		icon: FileText,
-		title: "Legal & Documentation",
-		description:
-			"C-of-O processing, deed of assignment, survey plans — we handle all legal paperwork with transparency and speed.",
-	},
 ];
 
 export default function Services() {
@@ -46,10 +40,7 @@ export default function Services() {
 				{/* Header */}
 				<div className="text-center mb-16">
 					<p className="section-label mb-3">What We Offer</p>
-					<h2
-						className="text-4xl md:text-5xl font-bold text-navy mb-5 gold-line-center"
-						style={{ fontFamily: "'Playfair Display', serif" }}
-					>
+					<h2 className="text-4xl md:text-5xl font-bold text-navy mb-5 gold-line-center">
 						Full-Spectrum Property Services
 					</h2>
 					<p className="text-gray-500 max-w-xl mx-auto text-base leading-relaxed mt-6">
@@ -84,13 +75,7 @@ export default function Services() {
 										/>
 									</div>
 
-									<h3
-										className="text-xl font-bold text-navy group-hover:text-white mb-3 transition-colors"
-										style={{
-											fontFamily:
-												"'Playfair Display', serif",
-										}}
-									>
+									<h3 className="text-xl font-bold text-navy group-hover:text-white mb-3 transition-colors">
 										{service.title}
 									</h3>
 									<p className="text-gray-500 group-hover:text-white/75 text-sm leading-relaxed transition-colors">

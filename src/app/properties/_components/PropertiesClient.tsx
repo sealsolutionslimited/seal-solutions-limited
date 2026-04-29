@@ -1,14 +1,6 @@
 "use client";
 import { useState } from "react";
-import {
-	Search,
-	MapPin,
-	X,
-	ChevronDown,
-	Grid3X3,
-	List,
-	Home,
-} from "lucide-react";
+import { Search, MapPin, X, Grid3X3, List, Home } from "lucide-react";
 import Link from "next/link";
 import { sortOptions } from "@/data/property";
 import { priceMatchesRange } from "@/lib/helper";
@@ -17,6 +9,16 @@ import { PropertyListRow } from "@/components/shared/PropertyListRow";
 import NavbarStatic from "@/components/layout/NavbarStatic";
 import Footer from "@/components/layout/Footer";
 import { PropertyListing } from "@/types/listings";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 interface PropertiesClientProps {
 	properties: PropertyListing[];
@@ -51,17 +53,27 @@ export default function PropertiesClient({
 	const filtered = sorted.filter((p) => {
 		if (activeCategory !== "All" && p.tag !== activeCategory) return false;
 		if (activeType !== "All Types" && p.type !== activeType) return false;
-		if (!priceMatchesRange(p.price ?? undefined, activePriceRange)) return false;
+		if (!priceMatchesRange(p.price ?? undefined, activePriceRange))
+			return false;
 		if (activeBeds !== "Any Beds") {
 			const minBeds = parseInt(activeBeds);
 			if ((p.beds ?? 0) < minBeds) return false;
 		}
-		if (
-			searchQuery &&
-			!p.location?.toLowerCase().includes(searchQuery.toLowerCase()) &&
-			!p.title?.toLowerCase().includes(searchQuery.toLowerCase())
-		)
-			return false;
+		if (searchQuery) {
+			const q = searchQuery.toLowerCase().replace(/\s/g, "");
+			const matchesLocation = p.location
+				?.toLowerCase()
+				.includes(searchQuery.toLowerCase());
+			const matchesTitle = p.title
+				?.toLowerCase()
+				.includes(searchQuery.toLowerCase());
+			const matchesPostcode = p.postcode
+				?.toLowerCase()
+				.replace(/\s/g, "")
+				.includes(q);
+			if (!matchesLocation && !matchesTitle && !matchesPostcode)
+				return false;
+		}
 		return true;
 	});
 
@@ -77,7 +89,7 @@ export default function PropertiesClient({
 
 			{/* Search Header */}
 			<div
-				className="relative overflow-hidden"
+				className="relative overflow-hidden px-10"
 				style={{
 					background:
 						"linear-gradient(135deg, #0b1535 0%, #162050 45%, #1e3070 100%)",
@@ -151,127 +163,163 @@ export default function PropertiesClient({
 					</p>
 
 					<div className="bg-white rounded-2xl shadow-2xl overflow-visible">
-						<div className="flex border-b border-gray-100 rounded-t-2xl overflow-hidden">
-							{(["Buy", "Rent"] as const).map((tab) => (
-								<button
-									key={tab}
-									onClick={() =>
-										setActiveCategory(
-											tab === "Buy"
-												? "For Sale"
-												: "To Let",
-										)
-									}
-									className={`flex-1 py-3.5 text-xs font-semibold uppercase tracking-widest transition-all ${
-										(tab === "Buy" &&
-											activeCategory === "For Sale") ||
-										(tab === "Rent" &&
-											activeCategory === "To Let")
-											? "bg-[#162050] text-white"
-											: "text-gray-500 hover:text-[#162050] hover:bg-gray-50"
-									}`}
-								>
-									{tab}
-								</button>
-							))}
-						</div>
-
-						<div className="p-4 flex flex-col md:flex-row gap-3 items-stretch">
-							<div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-lg px-4 h-12 focus-within:border-[#162050] transition-colors min-w-0">
-								<MapPin
-									size={16}
-									className="text-amber-500 shrink-0"
-								/>
-								<input
-									type="text"
-									placeholder="Area, city or postcode…"
-									value={searchQuery}
-									onChange={(e) =>
-										setSearchQuery(e.target.value)
-									}
-									className="flex-1 outline-none text-sm text-gray-700 placeholder-gray-400 bg-transparent min-w-0"
-								/>
-								{searchQuery && (
-									<button onClick={() => setSearchQuery("")}>
-										<X
-											size={13}
-											className="text-gray-400 hover:text-gray-600"
-										/>
+						<div className="p-4 flex flex-col gap-3">
+							{/* Buy / Rent toggle */}
+							<div className="flex bg-gray-100 rounded-full p-1 self-start">
+								{(["Buy", "Rent"] as const).map((tab) => (
+									<button
+										key={tab}
+										onClick={() =>
+											setActiveCategory(
+												tab === "Buy"
+													? "For Sale"
+													: "For Rent",
+											)
+										}
+										className={cn(
+											"px-5 py-1.5 text-xs font-semibold uppercase tracking-widest rounded-full transition-all cursor-pointer",
+											(tab === "Buy" &&
+												activeCategory ===
+													"For Sale") ||
+												(tab === "Rent" &&
+													activeCategory ===
+														"For Rent")
+												? "bg-[#162050] text-white shadow-sm"
+												: "text-gray-500 hover:text-gray-700",
+										)}
+									>
+										{tab}
 									</button>
-								)}
+								))}
 							</div>
 
-							<div className="relative">
-								<select
+							{/* Filters row */}
+							<div className="flex flex-col md:flex-row gap-3 items-stretch">
+								{/* Location */}
+								<div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-lg px-3 h-11 focus-within:border-[#162050] focus-within:ring-2 focus-within:ring-[#162050]/20 transition-colors min-w-0 bg-white">
+									<MapPin
+										size={16}
+										className="text-amber-500 shrink-0"
+									/>
+									<Input
+										type="text"
+										placeholder="Area, city or postcode…"
+										value={searchQuery}
+										onChange={(e) =>
+											setSearchQuery(e.target.value)
+										}
+										className="flex-1 border-0 shadow-none ring-0 focus-visible:ring-0 p-0 h-auto text-sm placeholder:text-gray-400 bg-transparent"
+									/>
+									{searchQuery && (
+										<button
+											onClick={() => setSearchQuery("")}
+										>
+											<X
+												size={13}
+												className="text-gray-400 hover:text-gray-600"
+											/>
+										</button>
+									)}
+								</div>
+
+								{/* Property type */}
+								<Select
 									value={activeType}
-									onChange={(e) =>
-										setActiveType(e.target.value)
-									}
-									className="appearance-none h-12 bg-white border border-gray-200 rounded-lg pl-4 pr-9 text-sm text-gray-700 focus:outline-none focus:border-[#162050] cursor-pointer w-full md:w-auto"
+									onValueChange={setActiveType}
 								>
-									<option>All Types</option>
-									<option>Flat / Apartment</option>
-									<option>House</option>
-									<option>Terraced</option>
-									<option>Detached</option>
-									<option>Semi-Detached</option>
-									<option>Commercial</option>
-									<option>Land</option>
-								</select>
-								<ChevronDown
-									size={13}
-									className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-								/>
-							</div>
+									<SelectTrigger className="h-11 border-gray-200 focus:ring-[#162050]/20 focus:border-[#162050] w-full md:w-auto text-sm text-gray-700 cursor-pointer">
+										<SelectValue placeholder="All Types" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="All Types">
+											All Types
+										</SelectItem>
+										<SelectItem value="Flat / Apartment">
+											Flat / Apartment
+										</SelectItem>
+										<SelectItem value="House">
+											House
+										</SelectItem>
+										<SelectItem value="Terraced">
+											Terraced
+										</SelectItem>
+										<SelectItem value="Detached">
+											Detached
+										</SelectItem>
+										<SelectItem value="Semi-Detached">
+											Semi-Detached
+										</SelectItem>
+										<SelectItem value="Commercial">
+											Commercial
+										</SelectItem>
+										<SelectItem value="Land">
+											Land
+										</SelectItem>
+									</SelectContent>
+								</Select>
 
-							<div className="relative">
-								<select
+								{/* Bedrooms */}
+								<Select
 									value={activeBeds}
-									onChange={(e) =>
-										setActiveBeds(e.target.value)
-									}
-									className="appearance-none h-12 bg-white border border-gray-200 rounded-lg pl-4 pr-9 text-sm text-gray-700 focus:outline-none focus:border-[#162050] cursor-pointer w-full md:w-auto"
+									onValueChange={setActiveBeds}
 								>
-									<option>Any Beds</option>
-									<option>1+ Beds</option>
-									<option>2+ Beds</option>
-									<option>3+ Beds</option>
-									<option>4+ Beds</option>
-									<option>5+ Beds</option>
-								</select>
-								<ChevronDown
-									size={13}
-									className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-								/>
-							</div>
+									<SelectTrigger className="h-11 border-gray-200 focus:ring-[#162050]/20 focus:border-[#162050] w-full md:w-auto text-sm text-gray-700 cursor-pointer">
+										<SelectValue placeholder="Any Beds" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="Any Beds">
+											Any Beds
+										</SelectItem>
+										<SelectItem value="1+ Beds">
+											1+ Beds
+										</SelectItem>
+										<SelectItem value="2+ Beds">
+											2+ Beds
+										</SelectItem>
+										<SelectItem value="3+ Beds">
+											3+ Beds
+										</SelectItem>
+										<SelectItem value="4+ Beds">
+											4+ Beds
+										</SelectItem>
+										<SelectItem value="5+ Beds">
+											5+ Beds
+										</SelectItem>
+									</SelectContent>
+								</Select>
 
-							<div className="relative">
-								<select
+								{/* Price range */}
+								<Select
 									value={activePriceRange}
-									onChange={(e) =>
-										setActivePriceRange(e.target.value)
-									}
-									className="appearance-none h-12 bg-white border border-gray-200 rounded-lg pl-4 pr-9 text-sm text-gray-700 focus:outline-none focus:border-[#162050] cursor-pointer w-full md:w-auto"
+									onValueChange={setActivePriceRange}
 								>
-									<option>Any Price</option>
-									<option>Under £500k</option>
-									<option>£500k – £1M</option>
-									<option>£1M – £2M</option>
-									<option>£2M+</option>
-								</select>
-								<ChevronDown
-									size={13}
-									className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-								/>
-							</div>
+									<SelectTrigger className="h-11 border-gray-200 focus:ring-[#162050]/20 focus:border-[#162050] w-full md:w-auto text-sm text-gray-700 cursor-pointer">
+										<SelectValue placeholder="Any Price" />
+									</SelectTrigger>
+									<SelectContent>
+										<SelectItem value="Any Price">
+											Any Price
+										</SelectItem>
+										<SelectItem value="Under £500k">
+											Under £500k
+										</SelectItem>
+										<SelectItem value="£500k – £1M">
+											£500k – £1M
+										</SelectItem>
+										<SelectItem value="£1M – £2M">
+											£1M – £2M
+										</SelectItem>
+										<SelectItem value="£2M+">
+											£2M+
+										</SelectItem>
+									</SelectContent>
+								</Select>
 
-							<button
-								className="h-12 px-7 rounded-lg text-white font-semibold text-sm flex items-center gap-2 shrink-0 hover:opacity-90 transition-opacity"
-								style={{ background: "#c9a84c" }}
-							>
-								<Search size={16} />
-								Search
-							</button>
+								<Button className="h-11 px-7 bg-gold hover:bg-[#b8963e] text-white font-semibold text-sm gap-2 shrink-0 cursor-pointer w-full md:w-auto rounded-lg">
+									<Search size={16} />
+									Search
+								</Button>
+							</div>
 						</div>
 					</div>
 
@@ -308,21 +356,21 @@ export default function PropertiesClient({
 					</span>
 
 					<div className="flex items-center gap-3">
-						<div className="relative">
-							<select
-								value={activeSort}
-								onChange={(e) => setActiveSort(e.target.value)}
-								className="appearance-none bg-white border border-gray-200 rounded-lg pl-3 pr-8 py-2 text-sm text-gray-700 focus:outline-none focus:border-[#162050] cursor-pointer"
-							>
+						<Select
+							value={activeSort}
+							onValueChange={setActiveSort}
+						>
+							<SelectTrigger className="h-9 bg-white border-gray-200 focus:ring-[#162050]/20 focus:border-[#162050] text-sm text-gray-700 cursor-pointer">
+								<SelectValue />
+							</SelectTrigger>
+							<SelectContent>
 								{sortOptions.map((o) => (
-									<option key={o}>{o}</option>
+									<SelectItem key={o} value={o}>
+										{o}
+									</SelectItem>
 								))}
-							</select>
-							<ChevronDown
-								size={13}
-								className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"
-							/>
-						</div>
+							</SelectContent>
+						</Select>
 
 						<div className="flex bg-white border border-gray-200 rounded-lg overflow-hidden">
 							<button

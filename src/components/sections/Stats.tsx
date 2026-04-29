@@ -12,7 +12,7 @@ export default function Stats() {
 				<div className="grid grid-cols-2 md:grid-cols-4 gap-8">
 					{stats.map((stat, i) => (
 						<div key={i} className="text-center">
-							<div className="text-4xl font-bold mb-1 text-gold-light playfair">
+							<div className="text-4xl font-bold mb-1 text-gold-light">
 								{stat.number}
 							</div>
 							<div className="text-white/60 text-sm tracking-wide uppercase">

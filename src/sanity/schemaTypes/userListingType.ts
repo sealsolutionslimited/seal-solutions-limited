@@ -91,6 +91,18 @@ const userListingType = defineType({
 		}),
 
 		defineField({
+			name: "postcode",
+			title: "Postcode",
+			type: "string",
+			description: "UK postcode, e.g. SW1A 1AA",
+			validation: (Rule) =>
+				Rule.required().regex(
+					/^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$/i,
+					{ name: "UK postcode", invert: false },
+				),
+		}),
+
+		defineField({
 			name: "beds",
 			title: "Bedrooms",
 			type: "number",

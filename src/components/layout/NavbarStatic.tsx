@@ -9,7 +9,7 @@ import { SignInButton, Show, UserButton } from "@clerk/nextjs";
 const navLinks = [
 	{ label: "Buy", href: "/properties" },
 	{ label: "Rent", href: "/properties" },
-	{ label: "Sell", href: "/#services" },
+	{ label: "Sell", href: "/list-property" },
 	{ label: "Cleaning", href: "/cleaning" },
 	{ label: "About", href: "/#how-it-works" },
 ];

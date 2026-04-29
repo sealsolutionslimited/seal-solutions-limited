@@ -105,6 +105,7 @@ export default function PropertyForm({ plan, paymentRecordId }: Props) {
 		sqft,
 		title,
 		location,
+		postcode,
 		description,
 		price,
 		amenities,
@@ -137,6 +138,8 @@ export default function PropertyForm({ plan, paymentRecordId }: Props) {
 					!!title &&
 					title.length >= 5 &&
 					!!location &&
+					!!postcode &&
+					/^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$/i.test(postcode) &&
 					!!description &&
 					description.length >= 50
 				);
@@ -165,6 +168,7 @@ export default function PropertyForm({ plan, paymentRecordId }: Props) {
 		fd.append("sqft", sqft);
 		fd.append("title", title);
 		fd.append("location", location);
+		fd.append("postcode", postcode.toUpperCase().trim());
 		fd.append("description", description);
 		fd.append("price", price);
 		fd.append("amenities", JSON.stringify(amenities));
@@ -395,9 +399,39 @@ export default function PropertyForm({ plan, paymentRecordId }: Props) {
 									onChange={(e) =>
 										setField("location", e.target.value)
 									}
-									placeholder="e.g. Shoreditch, London E2 6AA"
+									placeholder="e.g. Shoreditch, London"
 									className="h-11 border-gray-200 focus-visible:ring-amber-300 focus-visible:border-amber-400"
 								/>
+							</div>
+							<div>
+								<FieldLabel required>Postcode</FieldLabel>
+								<Input
+									value={postcode}
+									onChange={(e) =>
+										setField(
+											"postcode",
+											e.target.value.toUpperCase(),
+										)
+									}
+									placeholder="e.g. SW1A 1AA"
+									maxLength={8}
+									className={cn(
+										"h-11 border-gray-200 focus-visible:ring-amber-300 focus-visible:border-amber-400",
+										postcode &&
+											!/^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$/i.test(
+												postcode,
+											) &&
+											"border-red-300 focus-visible:ring-red-200 focus-visible:border-red-400",
+									)}
+								/>
+								{postcode &&
+									!/^[A-Z]{1,2}[0-9][0-9A-Z]?\s?[0-9][A-Z]{2}$/i.test(
+										postcode,
+									) && (
+										<p className="text-xs text-red-500 mt-1">
+											Enter a valid UK postcode
+										</p>
+									)}
 							</div>
 							<div>
 								<FieldLabel required>Description</FieldLabel>
@@ -643,11 +677,6 @@ export default function PropertyForm({ plan, paymentRecordId }: Props) {
 								</p>
 							</div>
 
-							<div className="bg-amber-50 border border-amber-200 rounded-xl px-4 py-3 text-sm text-amber-700">
-								<strong>Privacy note:</strong> Your contact
-								details will only be visible to logged-in users
-								viewing your listing.
-							</div>
 						</div>
 					</div>
 				)}
@@ -671,6 +700,7 @@ export default function PropertyForm({ plan, paymentRecordId }: Props) {
 							/>
 							<ReviewRow label="Title" value={title} />
 							<ReviewRow label="Location" value={location} />
+							<ReviewRow label="Postcode" value={postcode.toUpperCase()} />
 							<ReviewRow
 								label="Price"
 								value={`£${Number(price).toLocaleString()}${tag === "For Rent" ? " / year" : ""}`}

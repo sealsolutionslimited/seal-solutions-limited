@@ -10,6 +10,7 @@ export interface ListingDraft {
 	sqft: string;
 	title: string;
 	location: string;
+	postcode: string;
 	description: string;
 	price: string;
 	amenities: string[];
@@ -41,6 +42,7 @@ const initial: ListingDraft = {
 	sqft: "",
 	title: "",
 	location: "",
+	postcode: "",
 	description: "",
 	price: "",
 	amenities: [],

@@ -89,6 +89,7 @@ export async function createProperty(formData: FormData) {
 		baths: Number(formData.get("baths")),
 		sqft: formData.get("sqft") as string,
 		location: formData.get("location") as string,
+		postcode: (formData.get("postcode") as string).toUpperCase().trim(),
 		title: formData.get("title") as string,
 		description: formData.get("description") as string,
 		price: Number(formData.get("price")),

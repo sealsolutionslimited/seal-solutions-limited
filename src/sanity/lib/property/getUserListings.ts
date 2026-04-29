@@ -9,6 +9,7 @@ const USER_LISTINGS_QUERY = groq`
 		price,
 		title,
 		location,
+		postcode,
 		beds,
 		baths,
 		sqft,

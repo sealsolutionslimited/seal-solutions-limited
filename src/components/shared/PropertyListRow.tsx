@@ -76,10 +76,7 @@ export function PropertyListRow({
 			{/* Content */}
 			<div className="flex-1 p-6 flex flex-col justify-between">
 				<div>
-					<h3
-						className="font-semibold text-[#162050] text-lg leading-tight mb-1 group-hover:text-amber-600 transition-colors"
-						style={{ fontFamily: "'Playfair Display', serif" }}
-					>
+					<h3 className="font-semibold text-[#162050] text-lg leading-tight mb-1 group-hover:text-amber-600 transition-colors">
 						{listing.title}
 					</h3>
 					<div className="flex items-center gap-1 text-gray-400 text-sm mb-4">
@@ -107,10 +104,7 @@ export function PropertyListRow({
 					</div>
 				</div>
 				<div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-					<span
-						className="text-2xl font-bold text-[#162050]"
-						style={{ fontFamily: "'Playfair Display', serif" }}
-					>
+					<span className="text-2xl font-bold text-[#162050]">
 						{formatToPounds(listing.price ?? undefined)}
 					</span>
 					<Link

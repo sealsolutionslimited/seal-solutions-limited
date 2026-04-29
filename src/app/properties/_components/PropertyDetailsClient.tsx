@@ -295,7 +295,9 @@ export default function PropertyDetailsClient({
 						<div className="flex items-center justify-between bg-white rounded-2xl px-5 py-4 border border-gray-100 shadow-sm">
 							<div>
 								<p className="text-2xl font-bold text-[#162050]">
-									{formatToPounds(property.price ?? undefined)}
+									{formatToPounds(
+										property.price ?? undefined,
+									)}
 								</p>
 								{property.tag === "For Rent" && (
 									<p className="text-xs text-gray-400 mt-0.5">
@@ -377,13 +379,7 @@ export default function PropertyDetailsClient({
 							<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
 								<div className="flex items-center gap-3 mb-4">
 									<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-									<h2
-										className="text-lg font-bold text-[#162050]"
-										style={{
-											fontFamily:
-												"'Playfair Display', serif",
-										}}
-									>
+									<h2 className="text-lg font-bold text-[#162050]">
 										About This Property
 									</h2>
 								</div>
@@ -399,13 +395,7 @@ export default function PropertyDetailsClient({
 								<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
 									<div className="flex items-center gap-3 mb-4">
 										<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-										<h2
-											className="text-lg font-bold text-[#162050]"
-											style={{
-												fontFamily:
-													"'Playfair Display', serif",
-											}}
-										>
+										<h2 className="text-lg font-bold text-[#162050]">
 											Key Features
 										</h2>
 									</div>
@@ -432,12 +422,7 @@ export default function PropertyDetailsClient({
 						<div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
 							<div className="flex items-center gap-3 mb-4">
 								<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-								<h2
-									className="text-lg font-bold text-[#162050]"
-									style={{
-										fontFamily: "'Playfair Display', serif",
-									}}
-								>
+								<h2 className="text-lg font-bold text-[#162050]">
 									Property Details
 								</h2>
 							</div>
@@ -549,12 +534,7 @@ export default function PropertyDetailsClient({
 									</span>
 								)}
 							</div>
-							<h1
-								className="text-3xl xl:text-4xl font-bold text-[#162050] leading-snug mb-1.5"
-								style={{
-									fontFamily: "'Playfair Display', serif",
-								}}
-							>
+							<h1 className="text-3xl xl:text-4xl font-bold text-[#162050] leading-snug mb-1.5">
 								{property.title}
 							</h1>
 							<p className="flex items-center gap-1.5 text-gray-500 text-sm">
@@ -692,13 +672,7 @@ export default function PropertyDetailsClient({
 									<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
 										<div className="flex items-center gap-3 mb-5">
 											<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-											<h2
-												className="text-xl font-bold text-[#162050]"
-												style={{
-													fontFamily:
-														"'Playfair Display', serif",
-												}}
-											>
+											<h2 className="text-xl font-bold text-[#162050]">
 												About This Property
 											</h2>
 										</div>
@@ -715,13 +689,7 @@ export default function PropertyDetailsClient({
 										<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
 											<div className="flex items-center gap-3 mb-5">
 												<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-												<h2
-													className="text-xl font-bold text-[#162050]"
-													style={{
-														fontFamily:
-															"'Playfair Display', serif",
-													}}
-												>
+												<h2 className="text-xl font-bold text-[#162050]">
 													Key Features
 												</h2>
 											</div>
@@ -748,13 +716,7 @@ export default function PropertyDetailsClient({
 								<div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-sm">
 									<div className="flex items-center gap-3 mb-5">
 										<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
-										<h2
-											className="text-xl font-bold text-[#162050]"
-											style={{
-												fontFamily:
-													"'Playfair Display', serif",
-											}}
-										>
+										<h2 className="text-xl font-bold text-[#162050]">
 											Property Details
 										</h2>
 									</div>
@@ -782,13 +744,7 @@ export default function PropertyDetailsClient({
 									<div className="px-8 pt-6 pb-4 flex items-center gap-3">
 										<span className="w-1 h-6 rounded-full bg-amber-500 shrink-0" />
 										<div>
-											<h2
-												className="text-xl font-bold text-[#162050]"
-												style={{
-													fontFamily:
-														"'Playfair Display', serif",
-												}}
-											>
+											<h2 className="text-xl font-bold text-[#162050]">
 												Location
 											</h2>
 											<p className="text-sm text-gray-500 mt-0.5">
@@ -827,7 +783,9 @@ export default function PropertyDetailsClient({
 									<div className="flex items-start justify-between mb-1">
 										<div>
 											<p className="text-3xl font-bold text-[#162050]">
-												{formatToPounds(property.price ?? undefined)}
+												{formatToPounds(
+													property.price ?? undefined,
+												)}
 											</p>
 											{property.tag === "For Rent" && (
 												<p className="text-xs text-gray-400 mt-0.5">
@@ -917,13 +875,15 @@ export default function PropertyDetailsClient({
 													Seal Solutions
 												</p>
 												<div className="flex items-center gap-0.5 mt-0.5">
-													{[...Array(5)].map((_, i) => (
-														<Star
-															key={i}
-															size={11}
-															className="fill-amber-400 text-amber-400"
-														/>
-													))}
+													{[...Array(5)].map(
+														(_, i) => (
+															<Star
+																key={i}
+																size={11}
+																className="fill-amber-400 text-amber-400"
+															/>
+														),
+													)}
 													<span className="text-xs text-gray-400 ml-1.5">
 														5.0 (124)
 													</span>
@@ -945,7 +905,8 @@ export default function PropertyDetailsClient({
 												variant="outline"
 												className="w-full border-gray-200 text-gray-600 hover:border-[#162050] hover:text-[#162050] gap-2 h-11 rounded-xl font-semibold text-sm transition-all"
 											>
-												<Calendar size={15} /> Book Viewing
+												<Calendar size={15} /> Book
+												Viewing
 											</Button>
 										</div>
 									</div>
@@ -1038,13 +999,7 @@ export default function PropertyDetailsClient({
 									<p className="text-xs font-semibold text-amber-500 uppercase tracking-widest mb-1">
 										More Like This
 									</p>
-									<h2
-										className="text-2xl md:text-3xl font-bold text-[#162050]"
-										style={{
-											fontFamily:
-												"'Playfair Display', serif",
-										}}
-									>
+									<h2 className="text-2xl md:text-3xl font-bold text-[#162050]">
 										Similar Properties
 									</h2>
 								</div>
@@ -1118,7 +1073,9 @@ export default function PropertyDetailsClient({
 											</div>
 											<div className="pt-3 flex items-center justify-between">
 												<span className="text-base font-bold text-[#162050]">
-													{formatToPounds(p.price ?? undefined)}
+													{formatToPounds(
+														p.price ?? undefined,
+													)}
 												</span>
 												<span className="text-xs font-semibold text-[#162050] border border-[#162050] rounded-full px-3 py-1 group-hover:bg-[#162050] group-hover:text-white transition-all">
 													View

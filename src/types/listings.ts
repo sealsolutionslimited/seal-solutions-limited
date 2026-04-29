@@ -5,6 +5,7 @@ export interface PropertyListing {
 	price?: number | null;
 	title?: string | null;
 	location?: string | null;
+	postcode?: string | null;
 	beds?: number | null;
 	baths?: number | null;
 	sqft?: string | null;

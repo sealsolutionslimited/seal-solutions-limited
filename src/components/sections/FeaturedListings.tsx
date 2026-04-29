@@ -29,10 +29,7 @@ export default function FeaturedListings({
 				<div className="flex flex-col md:flex-row md:items-end justify-between mb-12">
 					<div>
 						<p className="section-label mb-3">Properties</p>
-						<h2
-							className="text-4xl md:text-5xl font-bold text-navy gold-line"
-							style={{ fontFamily: "'Playfair Display', serif" }}
-						>
+						<h2 className="text-4xl md:text-5xl font-bold text-navy gold-line">
 							Featured Listings
 						</h2>
 					</div>

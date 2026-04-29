@@ -68,7 +68,6 @@ export default function HowItWorks() {
 							animate={isInView ? { opacity: 1, y: 0 } : {}}
 							transition={{ duration: 0.6, delay: 0.1 }}
 							className="text-4xl md:text-5xl font-bold text-white mb-6 gold-line"
-							style={{ fontFamily: "'Playfair Display', serif" }}
 						>
 							How Seal Solutions Works
 						</motion.h2>
@@ -144,8 +143,6 @@ export default function HowItWorks() {
 										}}
 										className="w-14 h-14 rounded-xl flex items-center justify-center text-xl font-bold transition-shadow duration-300 group-hover:shadow-[0_0_20px_rgba(251,191,36,0.25)]"
 										style={{
-											fontFamily:
-												"'Playfair Display', serif",
 											background:
 												i % 2 === 0
 													? "linear-gradient(135deg, #f59e0b, #fbbf24)"
@@ -165,13 +162,7 @@ export default function HowItWorks() {
 								</div>
 
 								<div className="pb-8 pt-1">
-									<h3
-										className="text-white font-semibold text-lg mb-1.5 group-hover:text-amber-400 transition-colors duration-300"
-										style={{
-											fontFamily:
-												"'Playfair Display', serif",
-										}}
-									>
+									<h3 className="text-white font-semibold text-lg mb-1.5 group-hover:text-amber-400 transition-colors duration-300">
 										{step.title}
 									</h3>
 									<p className="text-white/50 text-sm leading-relaxed group-hover:text-white/70 transition-colors duration-300">

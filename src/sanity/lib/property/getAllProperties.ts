@@ -8,6 +8,7 @@ const FIELDS = `
 	price,
 	title,
 	location,
+	postcode,
 	beds,
 	baths,
 	sqft,

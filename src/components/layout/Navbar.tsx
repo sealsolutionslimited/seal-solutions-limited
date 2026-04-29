@@ -10,7 +10,7 @@ import MobileMenu from "./MobileMenu";
 const navLinks = [
 	{ label: "Buy", href: "#listings" },
 	{ label: "Rent", href: "#listings" },
-	{ label: "Sell", href: "#services" },
+	{ label: "Sell", href: "/list-property" },
 	{ label: "Cleaning", href: "/cleaning" },
 	{ label: "About", href: "#how-it-works" },
 ];

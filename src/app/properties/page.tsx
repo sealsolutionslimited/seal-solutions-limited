@@ -1,14 +1,3 @@
-// import { getAllProperties } from "@/sanity/lib/property/getAllProperties";
-// import PropertiesClient from "./_components/PropertiesClient";
-
-// const Properties = async () => {
-// 	const properties = await getAllProperties();
-
-// 	return <PropertiesClient properties={properties} />;
-// };
-
-// export default Properties;
-
 import { getAllProperties } from "@/sanity/lib/property/getAllProperties";
 import PropertiesClient from "./_components/PropertiesClient";
 
