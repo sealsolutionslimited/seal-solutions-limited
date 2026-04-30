@@ -89,7 +89,7 @@ export default function PropertiesClient({
 
 			{/* Search Header */}
 			<div
-				className="relative overflow-hidden px-10"
+				className="relative overflow-hidden md:px-10"
 				style={{
 					background:
 						"linear-gradient(135deg, #0b1535 0%, #162050 45%, #1e3070 100%)",
@@ -196,7 +196,7 @@ export default function PropertiesClient({
 							{/* Filters row */}
 							<div className="flex flex-col md:flex-row gap-3 items-stretch">
 								{/* Location */}
-								<div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-lg px-3 h-11 focus-within:border-[#162050] focus-within:ring-2 focus-within:ring-[#162050]/20 transition-colors min-w-0 bg-white">
+								<div className="flex items-center gap-2 flex-1 border border-gray-200 rounded-lg px-3 h-11 min-h-11 focus-within:border-[#162050] focus-within:ring-2 focus-within:ring-[#162050]/20 transition-colors min-w-0 bg-white">
 									<MapPin
 										size={16}
 										className="text-amber-500 shrink-0"
@@ -372,16 +372,16 @@ export default function PropertiesClient({
 							</SelectContent>
 						</Select>
 
-						<div className="flex bg-white border border-gray-200 rounded-lg overflow-hidden">
+						<div className="hidden sm:flex bg-white border border-gray-200 rounded-lg overflow-hidden">
 							<button
 								onClick={() => setViewMode("grid")}
-								className={`p-2 transition-colors ${viewMode === "grid" ? "bg-[#162050] text-white" : "text-gray-400 hover:text-gray-700"}`}
+								className={`p-2 transition-colors cursor-pointer ${viewMode === "grid" ? "bg-[#162050] text-white" : "text-gray-400 hover:text-gray-700"}`}
 							>
 								<Grid3X3 size={15} />
 							</button>
 							<button
 								onClick={() => setViewMode("list")}
-								className={`p-2 transition-colors ${viewMode === "list" ? "bg-[#162050] text-white" : "text-gray-400 hover:text-gray-700"}`}
+								className={`p-2 transition-colors cursor-pointer ${viewMode === "list" ? "bg-[#162050] text-white" : "text-gray-400 hover:text-gray-700"}`}
 							>
 								<List size={15} />
 							</button>
@@ -399,21 +399,35 @@ export default function PropertiesClient({
 							Try adjusting your filters above
 						</p>
 					</div>
-				) : viewMode === "grid" ? (
+				) : viewMode === "list" ? (
+					<>
+						{/* Mobile: always grid */}
+						<div className="grid gap-5 grid-cols-1 sm:grid-cols-2 sm:hidden">
+							{filtered.map((listing) => (
+								<PropertyCard
+									key={listing._id}
+									listing={listing}
+									liked={liked}
+									setLiked={setLiked}
+								/>
+							))}
+						</div>
+						{/* Desktop: list view */}
+						<div className="hidden sm:flex flex-col gap-4">
+							{filtered.map((listing) => (
+								<PropertyListRow
+									key={listing._id}
+									listing={listing}
+									liked={liked}
+									setLiked={setLiked}
+								/>
+							))}
+						</div>
+					</>
+				) : (
 					<div className="grid gap-5 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 						{filtered.map((listing) => (
 							<PropertyCard
-								key={listing._id}
-								listing={listing}
-								liked={liked}
-								setLiked={setLiked}
-							/>
-						))}
-					</div>
-				) : (
-					<div className="flex flex-col gap-4">
-						{filtered.map((listing) => (
-							<PropertyListRow
 								key={listing._id}
 								listing={listing}
 								liked={liked}

@@ -8,11 +8,11 @@ import { LayoutList } from "lucide-react";
 import MobileMenu from "./MobileMenu";
 
 const navLinks = [
-	{ label: "Buy", href: "#listings" },
-	{ label: "Rent", href: "#listings" },
+	{ label: "Buy", href: "/#listings" },
+	{ label: "Rent", href: "/#listings" },
 	{ label: "Sell", href: "/list-property" },
 	{ label: "Cleaning", href: "/cleaning" },
-	{ label: "About", href: "#how-it-works" },
+	{ label: "About", href: "/#how-it-works" },
 ];
 
 export default function Navbar() {
@@ -33,7 +33,7 @@ export default function Navbar() {
 			}`}
 		>
 			<div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-				<a href="#" className="flex items-center gap-3">
+				<Link href="/" className="flex items-center gap-3">
 					<Image
 						src={scrolled ? brandlogo6 : brandlogo5}
 						alt="Seal Solutions"
@@ -41,7 +41,7 @@ export default function Navbar() {
 						height={60}
 						className="object-contain"
 					/>
-				</a>
+				</Link>
 
 				<div className="flex items-center gap-50">
 					<div className="hidden md:flex items-center gap-8">
@@ -50,13 +50,13 @@ export default function Navbar() {
 								key={link.label}
 								href={link.href}
 								className={`
-                relative text-sm font-medium tracking-[0.04em]
-                transition-colors duration-300 ${textColorClass}
-                hover:text-amber-400
-                after:content-[''] after:absolute after:left-0 after:-bottom-1
-                after:h-0.5 after:w-0 after:bg-amber-400 after:transition-all
-                after:duration-300 hover:after:w-full
-              `}
+									relative text-sm font-medium tracking-[0.04em]
+									transition-colors duration-300 ${textColorClass}
+									hover:text-amber-400
+									after:content-[''] after:absolute after:left-0 after:-bottom-1
+									after:h-0.5 after:w-0 after:bg-amber-400 after:transition-all
+									after:duration-300 hover:after:w-full
+								`}
 							>
 								{link.label}
 							</Link>

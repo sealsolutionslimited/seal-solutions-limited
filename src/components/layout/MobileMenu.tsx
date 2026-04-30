@@ -13,11 +13,11 @@ import Image from "next/image";
 import { brandlogo6 } from "@/assets";
 
 const navLinks = [
-	{ label: "Buy", href: "#listings" },
-	{ label: "Rent", href: "#listings" },
+	{ label: "Buy", href: "/#listings" },
+	{ label: "Rent", href: "/#listings" },
 	{ label: "Sell", href: "/list-property" },
 	{ label: "Cleaning", href: "/cleaning" },
-	{ label: "About", href: "#how-it-works" },
+	{ label: "About", href: "/#how-it-works" },
 ];
 
 export default function MobileMenu() {
