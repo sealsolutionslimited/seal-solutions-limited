@@ -752,27 +752,15 @@ export default function PropertyDetailsClient({
 											</p>
 										</div>
 									</div>
-									<div
-										className="w-full flex items-center justify-center"
-										style={{
-											height: 240,
-											background:
-												"linear-gradient(135deg,#e8e4d8 0%,#d4cebc 100%)",
-										}}
-									>
-										<div className="text-center">
-											<MapPin
-												size={30}
-												className="mx-auto mb-2 text-amber-500"
-											/>
-											<p className="text-sm font-semibold text-gray-600">
-												{property.location}
-											</p>
-											<p className="text-xs text-gray-400 mt-1">
-												Map embed goes here
-											</p>
-										</div>
-									</div>
+									<iframe
+									src={`https://maps.google.com/maps?q=${encodeURIComponent(property.postcode ?? property.location ?? "")}&output=embed&z=14`}
+									width="100%"
+									height="240"
+									loading="lazy"
+									referrerPolicy="no-referrer-when-downgrade"
+									className="w-full border-0"
+									title={`Map of ${property.location}`}
+								/>
 								</div>
 							</div>
 
