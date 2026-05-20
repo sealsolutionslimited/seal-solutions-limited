@@ -33,5 +33,5 @@ const ALL_PROPERTIES_QUERY = groq`
 `;
 
 export const getAllProperties = async () => {
-	return client.fetch(ALL_PROPERTIES_QUERY, {}, { next: { revalidate: 10 } });
+	return client.fetch(ALL_PROPERTIES_QUERY, {}, { next: { revalidate: 300 } });
 };

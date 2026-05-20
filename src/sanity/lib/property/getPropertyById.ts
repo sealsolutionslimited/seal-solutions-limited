@@ -35,5 +35,5 @@ const PROPERTY_BY_ID_QUERY = groq`
 `;
 
 export const getPropertyById = async (id: string) => {
-	return client.fetch(PROPERTY_BY_ID_QUERY, { id }, { next: { revalidate: 10 } });
+	return client.fetch(PROPERTY_BY_ID_QUERY, { id }, { next: { revalidate: 300 } });
 };

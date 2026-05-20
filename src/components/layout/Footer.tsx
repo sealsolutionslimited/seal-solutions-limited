@@ -2,21 +2,9 @@ import { brandlogo5 } from "@/assets";
 import Image from "next/image";
 
 const footerLinks = {
-	Properties: [
-		"For Sale",
-		"For Rent",
-		"New Developments",
-		"Commercial",
-		"Land & Plots",
-	],
-	Services: [
-		"Property Sales",
-		"Lettings",
-		"Property Management",
-		"Valuation",
-		"Legal Services",
-	],
-	Company: ["About Us", "Our Team", "Careers", "News & Blog", "Contact"],
+	Properties: ["For Sale", "For Rent"],
+	Services: ["Property Sales", "Lettings", "Property Management"],
+	Company: ["About Us", "Contact"],
 };
 
 export default function Footer() {
