@@ -107,13 +107,13 @@ async function processBooking(sessionId: string) {
 	// Send confirmation to customer + notification to admin (fire and forget)
 	await Promise.allSettled([
 		resend.emails.send({
-			from: "Seal Solutions <onboarding@resend.dev>",
+			from: "Seal Solutions <noreply@sealsolutionslimited.com>",
 			to: m.customerEmail,
 			subject: `Booking Confirmed — ${SERVICE_TYPES[m.serviceType]?.label ?? m.serviceType} on ${m.date}`,
 			html: cleaningConfirmationHtml(emailData),
 		}),
 		resend.emails.send({
-			from: "Seal Solutions <onboarding@resend.dev>",
+			from: "Seal Solutions <noreply@sealsolutionslimited.com>",
 			to: "info@sealsolutionslimited.com",
 			subject: `New Cleaning Booking — ${m.customerName} · ${SERVICE_TYPES[m.serviceType]?.label ?? m.serviceType}`,
 			html: cleaningAdminNotificationHtml(emailData),
