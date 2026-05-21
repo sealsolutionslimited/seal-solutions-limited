@@ -140,7 +140,7 @@ export function contactEmailHtml({
                   <td>
                     <p style="margin:0 0 4px 0;font-size:12px;font-weight:700;color:#0f1a45;">Seal Solutions Limited</p>
                     <p style="margin:0;font-size:11px;color:#9ca3af;">112B Brigstock Road, Thornton Heath, Croydon, CR7 7JB</p>
-                    <p style="margin:4px 0 0 0;font-size:11px;color:#9ca3af;">+44 7879 183213 &nbsp;·&nbsp; sealsolutionslim@gmail.com</p>
+                    <p style="margin:4px 0 0 0;font-size:11px;color:#9ca3af;">+44 7879 183213 &nbsp;·&nbsp; info@sealsolutionslimited.com</p>
                   </td>
                   <td align="right" style="vertical-align:middle;">
                     <p style="margin:0;font-size:10px;color:#d1d5db;">This is an automated notification.</p>

@@ -20,7 +20,7 @@ const contactDetails = [
 	},
 	{
 		icon: Mail,
-		text: "sealsolutionslim@gmail.com",
+		text: "info@sealsolutionslimited.com",
 	},
 ];
 

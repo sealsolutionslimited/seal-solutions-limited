@@ -99,7 +99,7 @@ export function cleaningConfirmationHtml(data: BookingEmailData): string {
             <td style="background:#f8f5f0;padding:28px 48px;border-top:1px solid #e5e7eb;">
               <p style="margin:0 0 4px 0;font-size:12px;font-weight:700;color:#0f1a45;">Seal Solutions Limited</p>
               <p style="margin:0;font-size:11px;color:#9ca3af;">112B Brigstock Road, Thornton Heath, Croydon, CR7 7JB</p>
-              <p style="margin:4px 0 0 0;font-size:11px;color:#9ca3af;">+44 7879 183213 &nbsp;·&nbsp; sealsolutionslim@gmail.com</p>
+              <p style="margin:4px 0 0 0;font-size:11px;color:#9ca3af;">+44 7879 183213 &nbsp;·&nbsp; info@sealsolutionslimited.com</p>
             </td>
           </tr>
 

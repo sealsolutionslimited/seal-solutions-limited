@@ -114,7 +114,7 @@ async function processBooking(sessionId: string) {
 		}),
 		resend.emails.send({
 			from: "Seal Solutions <onboarding@resend.dev>",
-			to: "sealsolutionslim@gmail.com",
+			to: "info@sealsolutionslimited.com",
 			subject: `New Cleaning Booking — ${m.customerName} · ${SERVICE_TYPES[m.serviceType]?.label ?? m.serviceType}`,
 			html: cleaningAdminNotificationHtml(emailData),
 		}),
@@ -257,8 +257,8 @@ export default async function CleaningSuccessPage({
 								+44 7879 183213
 							</a>{" "}
 							or email{" "}
-							<a href="mailto:sealsolutionslim@gmail.com" className="font-bold underline">
-								sealsolutionslim@gmail.com
+							<a href="mailto:info@sealsolutionslimited.com" className="font-bold underline">
+								info@sealsolutionslimited.com
 							</a>
 							.
 						</p>

@@ -15,7 +15,7 @@ export async function POST(req: NextRequest) {
 
 		const { error } = await resend.emails.send({
 			from: "Seal Solutions <onboarding@resend.dev>",
-			to: "sealsolutionslim@gmail.com",
+			to: "info@sealsolutionslimited.com",
 			subject: `New Callback Request from ${name}`,
 			html: contactEmailHtml({ name, phone, interest, message }),
 		});
